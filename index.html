@@ -157,7 +157,33 @@ input::placeholder { color: #c8c0b5; }
 }
 .btn-add-new:hover { background: #f4faf5; border-color: #7a9e80; transform: translateY(-1px); }
 
-.footer-note { margin-top: 28px; text-align: center; color: #d0c8be; font-size: 11px; }
+.footer-note { margin-top: 16px; text-align: center; color: #d0c8be; font-size: 11px; }
+
+/* ── Backup bar ── */
+.backup-bar {
+  display: flex; gap: 8px; margin-top: 12px;
+}
+.backup-btn {
+  flex: 1; background: #fff; border: 1px solid #e8e4de;
+  border-radius: 12px; padding: 11px 10px;
+  font-size: 12px; font-weight: 700; color: #7a7068;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.18s;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.backup-btn:hover { background: #f5f3ef; border-color: #d0c8be; color: #2a2825; transform: translateY(-1px); }
+.backup-btn:active { transform: translateY(0); }
+
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: #2a2825; color: #fff; padding: 10px 20px;
+  border-radius: 20px; font-size: 13px; font-weight: 500;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+  opacity: 0; pointer-events: none; white-space: nowrap; z-index: 999;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
 /* ── Cumulative amount ── */
 .summary-cumulative {
@@ -273,6 +299,14 @@ input::placeholder { color: #c8c0b5; }
   </div>
 
 <button class="btn-add-new" id="showAddBtn">＋ ローンを追加</button>
+
+  <!-- Backup / Restore -->
+
+  <div class="backup-bar">
+    <button class="backup-btn" id="exportBtn">⬇ バックアップを保存</button>
+    <button class="backup-btn" id="importBtn">⬆ バックアップを読み込む</button>
+    <input type="file" id="importFile" accept=".json" style="display:none;" />
+  </div>
 
   <p class="footer-note">データはこのブラウザに保存されます</p>
 </main>
@@ -652,6 +686,61 @@ input::placeholder { color: #c8c0b5; }
 
   /* ── Init ────────────────────────────────── */
   load(); render();
+
+  /* ── Backup / Restore ────────────────────── */
+  function showToast(msg, duration = 2200) {
+    let t = document.getElementById("toast");
+    if (!t) { t = document.createElement("div"); t.id = "toast"; t.className = "toast"; document.body.appendChild(t); }
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove("show"), duration);
+  }
+
+  document.getElementById("exportBtn").onclick = () => {
+    const data = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      loans,
+      payments
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const dateStr = new Date().toISOString().slice(0,10).replace(/-/g,"");
+    a.href = url; a.download = `repayment-backup-${dateStr}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast("✓ バックアップを保存しました");
+  };
+
+  document.getElementById("importBtn").onclick = () => {
+    document.getElementById("importFile").click();
+  };
+
+  document.getElementById("importFile").onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (!data.loans || !data.payments) throw new Error("invalid");
+        if (!confirm(`バックアップを読み込みます。\n現在のデータは上書きされます。\n\nよろしいですか？`)) return;
+        loans = data.loans.map(l => ({
+          startYear: TY, startMonth: 1, endYear: TY+10, endMonth: 12, ...l
+        }));
+        payments = data.payments;
+        save();
+        render();
+        showToast("✓ バックアップを読み込みました");
+      } catch(err) {
+        showToast("⚠ ファイルが正しくありません");
+      }
+      e.target.value = "";
+    };
+    reader.readAsText(file);
+  };
 </script>
 
 </body>
