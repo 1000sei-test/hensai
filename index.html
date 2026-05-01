@@ -158,6 +158,37 @@ input::placeholder { color: #c8c0b5; }
 .btn-add-new:hover { background: #f4faf5; border-color: #7a9e80; transform: translateY(-1px); }
 
 .footer-note { margin-top: 28px; text-align: center; color: #d0c8be; font-size: 11px; }
+
+/* ── Cumulative amount ── */
+.summary-cumulative {
+  display: flex; align-items: baseline; gap: 6px; margin-bottom: 8px;
+}
+.summary-cumulative-label { color: #b5a898; font-size: 11px; }
+.summary-cumulative-value {
+  font-size: 17px; font-weight: 700; color: #2a2825;
+  font-variant-numeric: tabular-nums;
+}
+.summary-cumulative-sub { color: #c8c0b5; font-size: 11px; }
+
+.loan-cumulative {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; border-radius: 10px; margin-bottom: 10px;
+}
+.loan-cumulative-label { font-size: 11px; color: #9a9288; }
+.loan-cumulative-right { display: flex; align-items: baseline; gap: 5px; }
+.loan-cumulative-value {
+  font-size: 16px; font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.2s;
+}
+.loan-cumulative-total { font-size: 11px; color: #c8c0b5; }
+
+/* count-up animation */
+@keyframes countUp {
+  from { opacity: 0.4; transform: translateY(4px); }
+  to   { opacity: 1;   transform: translateY(0); }
+}
+.count-pop { animation: countUp 0.35s ease; }
 ```
 
   </style>
@@ -191,6 +222,11 @@ input::placeholder { color: #c8c0b5; }
     </div>
     <div class="summary-info">
       <div class="summary-year">全期間 返済進捗</div>
+      <div class="summary-cumulative">
+        <span class="summary-cumulative-label">累計支払額</span>
+        <span class="summary-cumulative-value" id="summaryTotal">¥0</span>
+        <span class="summary-cumulative-sub" id="summaryTotalSub"></span>
+      </div>
       <div class="summary-amount-label">今月の振込済</div>
       <span class="summary-amount-value" id="paidThisMonth">¥0</span>
       <span class="summary-amount-total" id="totalDue"></span>
@@ -258,6 +294,21 @@ input::placeholder { color: #c8c0b5; }
     { id:2, name:"カーローン", amount:25000, color:"#e8a87c", startYear:TY, startMonth:1, endYear:TY+5,  endMonth:12 },
     { id:3, name:"カードローン",amount:15000, color:"#8fa8d0", startYear:TY, startMonth:1, endYear:TY+2,  endMonth:12 },
   ];
+
+  /* ── Animate value ───────────────────────── */
+  const _prevValues = {};
+  function animateValue(id, newVal) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const formatted = "¥" + newVal.toLocaleString();
+    if (_prevValues[id] !== newVal) {
+      el.classList.remove("count-pop");
+      void el.offsetWidth;
+      el.classList.add("count-pop");
+      _prevValues[id] = newVal;
+    }
+    el.textContent = formatted;
+  }
 
   /* ── Storage ─────────────────────────────── */
   function load() {
@@ -343,8 +394,17 @@ input::placeholder { color: #c8c0b5; }
     loans.forEach(l => { totM += totalMonths(l); totP += paidAllTime(l); });
     const prog = totM === 0 ? 0 : Math.round(totP/totM*100);
 
+    // cumulative paid amount (all loans, all time)
+    let cumulativePaid = 0, cumulativeTotal = 0;
+    loans.forEach(l => {
+      cumulativePaid += paidAllTime(l) * l.amount;
+      cumulativeTotal += totalMonths(l) * l.amount;
+    });
+
     document.getElementById("ringFg").style.strokeDashoffset = CIRC*(1-prog/100);
     document.getElementById("ringLabel").textContent = prog+"%";
+    animateValue("summaryTotal", cumulativePaid);
+    document.getElementById("summaryTotalSub").textContent = "/ ¥"+cumulativeTotal.toLocaleString();
     document.getElementById("paidThisMonth").textContent = "¥"+paidNow.toLocaleString();
     document.getElementById("totalDue").textContent = "今月合計 ¥"+totalDue.toLocaleString()+" /月";
 
@@ -436,7 +496,19 @@ input::placeholder { color: #c8c0b5; }
     }
     card.appendChild(pr);
 
-    /* month grid */
+    /* cumulative paid for this loan */
+    const loanPaid = paidAllTime(loan) * loan.amount;
+    const loanTotal = totalMonths(loan) * loan.amount;
+    const lc = document.createElement("div");
+    lc.className = "loan-cumulative";
+    lc.style.background = loan.color + "10";
+    lc.innerHTML = `
+      <span class="loan-cumulative-label">累計支払額</span>
+      <div class="loan-cumulative-right">
+        <span class="loan-cumulative-value" id="lcv-${loan.id}" style="color:${loan.color}">¥${loanPaid.toLocaleString()}</span>
+        <span class="loan-cumulative-total">/ ¥${loanTotal.toLocaleString()}</span>
+      </div>`;
+    card.appendChild(lc);
     const grid = document.createElement("div");
     grid.className = "month-grid";
     MO.forEach((m, i) => {
@@ -498,6 +570,9 @@ input::placeholder { color: #c8c0b5; }
     const totP = paidAllTime(loan), totM = totalMonths(loan);
     const c = document.getElementById(`cnt-${loan.id}`);
     if (c) c.textContent = `${totP}/${totM}ヶ月`;
+    // update loan cumulative
+    const lcv = document.getElementById(`lcv-${loan.id}`);
+    if (lcv) animateValue(`lcv-${loan.id}`, totP * loan.amount);
     // update bar
     const viewPaid = MO.filter((_,i) => inRange(loan,viewYear,i+1) && payments[pkey(loan.id,viewYear,i+1)]).length;
     const viewTotal = MO.filter((_,i) => inRange(loan,viewYear,i+1)).length;
