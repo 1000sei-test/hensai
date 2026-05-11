@@ -159,6 +159,27 @@ input::placeholder { color: #c8c0b5; }
 
 .footer-note { margin-top: 16px; text-align: center; color: #d0c8be; font-size: 11px; }
 
+/* ── Mode toggle ── */
+.mode-toggle {
+  display: flex; gap: 0; background: #f0ece6; border-radius: 10px; padding: 3px;
+}
+.mode-btn {
+  flex: 1; border: none; border-radius: 8px; padding: 8px 10px;
+  font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;
+  background: transparent; color: #9a9288; transition: all 0.18s;
+}
+.mode-btn.active { background: #fff; color: #2a2825; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+/* ── Calc preview ── */
+.calc-preview {
+  margin-top: 8px; padding: 10px 12px; border-radius: 10px;
+  background: #f9f7f4; border: 1px solid #e8e4de;
+  font-size: 12px; color: #7a7068; line-height: 1.7;
+  min-height: 0; transition: all 0.2s;
+}
+.calc-preview:empty { display: none; }
+.calc-preview b { color: #2a2825; font-weight: 700; }
+
 /* ── Backup bar ── */
 .backup-bar {
   display: flex; gap: 8px; margin-top: 12px;
@@ -274,10 +295,6 @@ input::placeholder { color: #c8c0b5; }
         <input type="text" id="fName" placeholder="例: 奨学金" />
       </div>
       <div>
-        <div class="field-label">月々の返済額（円）</div>
-        <input type="number" id="fAmount" placeholder="例: 30000" />
-      </div>
-      <div>
         <div class="field-label">返済開始</div>
         <div class="field-pair">
           <select id="fStartYear"></select>
@@ -291,11 +308,46 @@ input::placeholder { color: #c8c0b5; }
           <select id="fEndMonth"></select>
         </div>
       </div>
-      <div class="form-btns">
-        <button class="btn btn-primary" id="fConfirm">保存する</button>
-        <button class="btn btn-secondary" id="fCancel">キャンセル</button>
+
+```
+  <!-- input mode toggle -->
+  <div>
+    <div class="field-label">金額の入力方法</div>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="modeMonthly" onclick="setMode('monthly')">月額で入力</button>
+      <button class="mode-btn" id="modeTotal" onclick="setMode('total')">総額で入力</button>
+    </div>
+  </div>
+
+  <!-- monthly mode -->
+  <div id="monthlyFields">
+    <div class="field-label">月々の返済額（円）</div>
+    <input type="number" id="fAmount" placeholder="例: 12300" />
+    <div class="calc-preview" id="previewFromMonthly"></div>
+  </div>
+
+  <!-- total mode -->
+  <div id="totalFields" style="display:none;">
+    <div class="field-label">返済総額（円）</div>
+    <input type="number" id="fTotal" placeholder="例: 1476000" />
+    <div class="calc-preview" id="previewFromTotal"></div>
+    <!-- remainder -->
+    <div id="remainderRow" style="display:none; margin-top:10px;">
+      <div class="field-label">端数 <span id="remainderAmt" style="color:#e8a87c;font-weight:700;"></span> の調整</div>
+      <div class="mode-toggle" style="margin-top:6px;">
+        <button class="mode-btn active" id="adjFirst" onclick="setAdj('first')">最初の月に加算</button>
+        <button class="mode-btn" id="adjLast" onclick="setAdj('last')">最後の月に加算</button>
       </div>
     </div>
+  </div>
+
+  <div class="form-btns">
+    <button class="btn btn-primary" id="fConfirm">保存する</button>
+    <button class="btn btn-secondary" id="fCancel">キャンセル</button>
+  </div>
+</div>
+```
+
   </div>
 
 <button class="btn-add-new" id="showAddBtn">＋ ローンを追加</button>
@@ -376,6 +428,17 @@ input::placeholder { color: #c8c0b5; }
   function totalMonths(loan) {
     return (loan.endYear - loan.startYear)*12 + (loan.endMonth - loan.startMonth) + 1;
   }
+
+  // actual yen amount for a given month (handles remainder)
+  function amountForMonth(loan, y, m) {
+    const rem = loan.remainder || 0;
+    if (rem === 0) return loan.amount;
+    const isFirst = y === loan.startYear && m === loan.startMonth;
+    const isLast  = y === loan.endYear   && m === loan.endMonth;
+    const adj     = loan.adjMode === 'last' ? isLast : isFirst;
+    return loan.amount + (adj ? rem : 0);
+  }
+
   function paidAllTime(loan) {
     let n = 0;
     for (let y = loan.startYear; y <= loan.endYear; y++)
@@ -383,6 +446,23 @@ input::placeholder { color: #c8c0b5; }
         if (inRange(loan,y,m) && payments[pkey(loan.id,y,m)]) n++;
     return n;
   }
+
+  // total yen paid (respects remainder month)
+  function paidYenAllTime(loan) {
+    let total = 0;
+    for (let y = loan.startYear; y <= loan.endYear; y++)
+      for (let m = 1; m <= 12; m++)
+        if (inRange(loan,y,m) && payments[pkey(loan.id,y,m)])
+          total += amountForMonth(loan, y, m);
+    return total;
+  }
+
+  // total yen for whole loan
+  function totalYen(loan) {
+    const rem = loan.remainder || 0;
+    return loan.amount * totalMonths(loan) + rem;
+  }
+
   function remainingMonths(loan) {
     const endYM = loan.endYear*100+loan.endMonth, nowYM = TY*100+TM;
     if (endYM < nowYM) return 0;
@@ -431,8 +511,8 @@ input::placeholder { color: #c8c0b5; }
     // cumulative paid amount (all loans, all time)
     let cumulativePaid = 0, cumulativeTotal = 0;
     loans.forEach(l => {
-      cumulativePaid += paidAllTime(l) * l.amount;
-      cumulativeTotal += totalMonths(l) * l.amount;
+      cumulativePaid += paidYenAllTime(l);
+      cumulativeTotal += totalYen(l);
     });
 
     document.getElementById("ringFg").style.strokeDashoffset = CIRC*(1-prog/100);
@@ -616,66 +696,145 @@ input::placeholder { color: #c8c0b5; }
     renderSummary();
   }
 
+  /* ── Form state ─────────────────────────── */
+  let inputMode = 'monthly'; // 'monthly' | 'total'
+  let adjMode   = 'first';   // 'first' | 'last'
+
+  function setMode(m) {
+    inputMode = m;
+    document.getElementById('modeMonthly').classList.toggle('active', m === 'monthly');
+    document.getElementById('modeTotal').classList.toggle('active', m === 'total');
+    document.getElementById('monthlyFields').style.display = m === 'monthly' ? '' : 'none';
+    document.getElementById('totalFields').style.display   = m === 'total'   ? '' : 'none';
+    updatePreview();
+  }
+  function setAdj(a) {
+    adjMode = a;
+    document.getElementById('adjFirst').classList.toggle('active', a === 'first');
+    document.getElementById('adjLast').classList.toggle('active',  a === 'last');
+  }
+
+  function getFormMonths() {
+    const sy = Number(document.getElementById('fStartYear').value);
+    const sm = Number(document.getElementById('fStartMonth').value);
+    const ey = Number(document.getElementById('fEndYear').value);
+    const em = Number(document.getElementById('fEndMonth').value);
+    return (ey - sy) * 12 + (em - sm) + 1;
+  }
+
+  function updatePreview() {
+    const months = getFormMonths();
+    if (months <= 0) return;
+    if (inputMode === 'monthly') {
+      const amt = Number(document.getElementById('fAmount').value);
+      const el = document.getElementById('previewFromMonthly');
+      if (!amt) { el.innerHTML = ''; return; }
+      const total = amt * months;
+      el.innerHTML = `<b>¥${amt.toLocaleString()}</b> × ${months}ヶ月 = 総額 <b>¥${total.toLocaleString()}</b>`;
+    } else {
+      const tot = Number(document.getElementById('fTotal').value);
+      const el = document.getElementById('previewFromTotal');
+      const remRow = document.getElementById('remainderRow');
+      const remAmt = document.getElementById('remainderAmt');
+      if (!tot) { el.innerHTML = ''; remRow.style.display = 'none'; return; }
+      const base = Math.floor(tot / months);
+      const rem  = tot - base * months;
+      if (rem === 0) {
+        el.innerHTML = `総額 <b>¥${tot.toLocaleString()}</b> ÷ ${months}ヶ月 = 月額 <b>¥${base.toLocaleString()}</b>`;
+        remRow.style.display = 'none';
+      } else {
+        el.innerHTML = `総額 <b>¥${tot.toLocaleString()}</b> ÷ ${months}ヶ月<br>月額 <b>¥${base.toLocaleString()}</b>（端数 <b style="color:#e8a87c">¥${rem.toLocaleString()}</b>）`;
+        remAmt.textContent = '¥' + rem.toLocaleString();
+        remRow.style.display = '';
+      }
+    }
+  }
+
+  // live preview on input/select change
+  ['fAmount','fTotal','fStartYear','fStartMonth','fEndYear','fEndMonth'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updatePreview);
+    document.getElementById(id).addEventListener('change', updatePreview);
+  });
+
   /* ── Form (add / edit) ───────────────────── */
   function openAdd() {
     editingId = null;
-    document.getElementById("formTitle").textContent = "ローンを追加";
-    document.getElementById("fConfirm").textContent = "追加する";
-    document.getElementById("fName").value = "";
-    document.getElementById("fAmount").value = "";
-    fillYears("fStartYear", TY);
-    fillMonths("fStartMonth", TM);
-    fillYears("fEndYear", TY+5);
-    fillMonths("fEndMonth", TM === 1 ? 12 : TM-1);
+    document.getElementById('formTitle').textContent = 'ローンを追加';
+    document.getElementById('fConfirm').textContent  = '追加する';
+    document.getElementById('fName').value    = '';
+    document.getElementById('fAmount').value  = '';
+    document.getElementById('fTotal').value   = '';
+    document.getElementById('previewFromMonthly').innerHTML = '';
+    document.getElementById('previewFromTotal').innerHTML   = '';
+    document.getElementById('remainderRow').style.display  = 'none';
+    fillYears('fStartYear', TY); fillMonths('fStartMonth', TM);
+    fillYears('fEndYear', TY+5); fillMonths('fEndMonth', TM === 1 ? 12 : TM-1);
+    setMode('monthly'); setAdj('first');
     showForm();
   }
 
   function openEdit(loan) {
     editingId = loan.id;
-    document.getElementById("formTitle").textContent = "返済を編集";
-    document.getElementById("fConfirm").textContent = "保存する";
-    document.getElementById("fName").value = loan.name;
-    document.getElementById("fAmount").value = loan.amount;
-    fillYears("fStartYear", loan.startYear);
-    fillMonths("fStartMonth", loan.startMonth);
-    fillYears("fEndYear", loan.endYear);
-    fillMonths("fEndMonth", loan.endMonth);
+    document.getElementById('formTitle').textContent = '返済を編集';
+    document.getElementById('fConfirm').textContent  = '保存する';
+    document.getElementById('fName').value   = loan.name;
+    document.getElementById('fAmount').value = loan.amount;
+    document.getElementById('fTotal').value  = '';
+    document.getElementById('previewFromMonthly').innerHTML = '';
+    document.getElementById('previewFromTotal').innerHTML   = '';
+    document.getElementById('remainderRow').style.display   = 'none';
+    fillYears('fStartYear', loan.startYear); fillMonths('fStartMonth', loan.startMonth);
+    fillYears('fEndYear',   loan.endYear);   fillMonths('fEndMonth',   loan.endMonth);
+    setMode(loan.inputMode || 'monthly'); setAdj(loan.adjMode || 'first');
+    updatePreview();
     showForm();
   }
 
   function showForm() {
-    document.getElementById("formPanel").style.display = "block";
-    document.getElementById("showAddBtn").style.display = "none";
-    document.getElementById("fName").focus();
+    document.getElementById('formPanel').style.display  = 'block';
+    document.getElementById('showAddBtn').style.display = 'none';
+    document.getElementById('fName').focus();
   }
-
   function closeForm() {
-    document.getElementById("formPanel").style.display = "none";
-    document.getElementById("showAddBtn").style.display = "block";
+    document.getElementById('formPanel').style.display  = 'none';
+    document.getElementById('showAddBtn').style.display = 'block';
     editingId = null;
   }
 
-  document.getElementById("showAddBtn").onclick = openAdd;
-  document.getElementById("fCancel").onclick = closeForm;
-  document.getElementById("fConfirm").onclick = () => {
-    const name  = document.getElementById("fName").value.trim();
-    const amount = Number(document.getElementById("fAmount").value);
-    const sy = Number(document.getElementById("fStartYear").value);
-    const sm = Number(document.getElementById("fStartMonth").value);
-    const ey = Number(document.getElementById("fEndYear").value);
-    const em = Number(document.getElementById("fEndMonth").value);
-    if (!name || !amount) { alert("ローン名と返済額を入力してください"); return; }
-    if (ey*100+em < sy*100+sm) { alert("終了は開始より後の月を設定してください"); return; }
+  document.getElementById('showAddBtn').onclick = openAdd;
+  document.getElementById('fCancel').onclick    = closeForm;
+  document.getElementById('fConfirm').onclick   = () => {
+    const name = document.getElementById('fName').value.trim();
+    const sy   = Number(document.getElementById('fStartYear').value);
+    const sm   = Number(document.getElementById('fStartMonth').value);
+    const ey   = Number(document.getElementById('fEndYear').value);
+    const em   = Number(document.getElementById('fEndMonth').value);
+    if (!name) { alert('ローン名を入力してください'); return; }
+    if (ey*100+em < sy*100+sm) { alert('終了は開始より後の月を設定してください'); return; }
+
+    const months = getFormMonths();
+    let amount, remainder = 0;
+
+    if (inputMode === 'monthly') {
+      amount = Number(document.getElementById('fAmount').value);
+      if (!amount) { alert('月々の返済額を入力してください'); return; }
+    } else {
+      const tot = Number(document.getElementById('fTotal').value);
+      if (!tot) { alert('返済総額を入力してください'); return; }
+      amount    = Math.floor(tot / months);
+      remainder = tot - amount * months;
+    }
+
+    const loanData = {
+      name, amount, remainder, adjMode,
+      startYear: sy, startMonth: sm, endYear: ey, endMonth: em,
+      inputMode,
+    };
 
     if (editingId === null) {
-      // add
-      loans.push({ id: Date.now(), name, amount, color: COLORS[loans.length % COLORS.length],
-        startYear: sy, startMonth: sm, endYear: ey, endMonth: em });
+      loans.push({ id: Date.now(), color: COLORS[loans.length % COLORS.length], ...loanData });
     } else {
-      // edit
-      loans = loans.map(l => l.id === editingId
-        ? { ...l, name, amount, startYear: sy, startMonth: sm, endYear: ey, endMonth: em }
-        : l);
+      loans = loans.map(l => l.id === editingId ? { ...l, ...loanData } : l);
     }
     save(); render(); closeForm();
   };
