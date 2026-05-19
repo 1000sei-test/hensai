@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
@@ -19,225 +18,222 @@
       padding-bottom: 80px;
     }
 
-```
-/* ── Header ── */
-.header {
-  background: #fff; border-bottom: 1px solid #e8e4de;
-  position: sticky; top: 0; z-index: 100;
-  box-shadow: 0 1px 12px rgba(0,0,0,0.04);
-}
-.header-inner {
-  max-width: 560px; margin: 0 auto; padding: 14px 20px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.header-label { font-size: 10px; color: #b5a898; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; }
-.header-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: #2a2825; margin-top: 1px; }
-.year-selector {
-  display: flex; align-items: center; gap: 6px;
-  background: #f5f3ef; border-radius: 10px; padding: 6px 10px; border: 1px solid #e8e4de;
-}
-.year-btn { background: none; border: none; color: #b5a898; cursor: pointer; font-size: 18px; line-height: 1; padding: 0 2px; transition: color 0.15s; }
-.year-btn:hover { color: #6b8f71; }
-.year-text { font-size: 14px; font-weight: 700; min-width: 38px; text-align: center; color: #2a2825; }
+    /* ── Header ── */
+    .header {
+      background: #fff; border-bottom: 1px solid #e8e4de;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 1px 12px rgba(0,0,0,0.04);
+    }
+    .header-inner {
+      max-width: 560px; margin: 0 auto; padding: 14px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .header-label { font-size: 10px; color: #b5a898; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; }
+    .header-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: #2a2825; margin-top: 1px; }
+    .year-selector {
+      display: flex; align-items: center; gap: 6px;
+      background: #f5f3ef; border-radius: 10px; padding: 6px 10px; border: 1px solid #e8e4de;
+    }
+    .year-btn { background: none; border: none; color: #b5a898; cursor: pointer; font-size: 18px; line-height: 1; padding: 0 2px; transition: color 0.15s; }
+    .year-btn:hover { color: #6b8f71; }
+    .year-text { font-size: 14px; font-weight: 700; min-width: 38px; text-align: center; color: #2a2825; }
 
-main { max-width: 560px; margin: 0 auto; padding: 20px 16px; }
+    main { max-width: 560px; margin: 0 auto; padding: 20px 16px; }
 
-/* ── Summary card ── */
-.summary-card {
-  background: #fff; border: 1px solid #e8e4de; border-radius: 20px;
-  padding: 22px 20px; margin-bottom: 16px;
-  display: flex; align-items: center; gap: 20px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.04);
-}
-.summary-ring { position: relative; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.ring-svg { transform: rotate(-90deg); }
-.ring-bg { fill: none; stroke: #ede9e3; stroke-width: 6; }
-.ring-fg { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.8s cubic-bezier(.4,0,.2,1); }
-.ring-label { position: absolute; font-size: 14px; font-weight: 700; color: #2a2825; }
-.summary-info { flex: 1; min-width: 0; }
-.summary-year { color: #b5a898; font-size: 11px; margin-bottom: 5px; }
-.summary-amount-label { color: #7a9e80; font-size: 12px; font-weight: 500; }
-.summary-amount-value { font-size: 22px; font-weight: 700; color: #2a2825; display: block; margin-top: 1px; margin-bottom: 2px; }
-.summary-amount-total { color: #c8c0b5; font-size: 12px; margin-bottom: 10px; display: block; }
-.tags { display: flex; gap: 5px; flex-wrap: wrap; }
-.tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+    /* ── Summary card ── */
+    .summary-card {
+      background: #fff; border: 1px solid #e8e4de; border-radius: 20px;
+      padding: 22px 20px; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 20px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+    }
+    .summary-ring { position: relative; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ring-svg { transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: #ede9e3; stroke-width: 6; }
+    .ring-fg { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.8s cubic-bezier(.4,0,.2,1); }
+    .ring-label { position: absolute; font-size: 14px; font-weight: 700; color: #2a2825; }
+    .summary-info { flex: 1; min-width: 0; }
+    .summary-year { color: #b5a898; font-size: 11px; margin-bottom: 5px; }
+    .summary-amount-label { color: #7a9e80; font-size: 12px; font-weight: 500; }
+    .summary-amount-value { font-size: 22px; font-weight: 700; color: #2a2825; display: block; margin-top: 1px; margin-bottom: 2px; }
+    .summary-amount-total { color: #c8c0b5; font-size: 12px; margin-bottom: 10px; display: block; }
+    .tags { display: flex; gap: 5px; flex-wrap: wrap; }
+    .tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
 
-/* ── Loan card ── */
-.loan-card {
-  background: #fff; border-radius: 16px; padding: 18px 18px 14px; margin-bottom: 10px;
-  border: 1px solid #e8e4de; box-shadow: 0 1px 8px rgba(0,0,0,0.03);
-  transition: box-shadow 0.2s, border-color 0.2s;
-}
-.loan-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); border-color: #d8d2ca; }
-.loan-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
-.loan-name-row { display: flex; align-items: flex-start; gap: 8px; }
-.loan-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-.loan-name { font-weight: 700; font-size: 15px; }
-.loan-amount { font-size: 13px; margin-top: 2px; padding-left: 17px; color: #9a9288; }
-.loan-amount-value { font-weight: 700; font-size: 14px; }
-.loan-meta { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-.loan-count { font-size: 11px; color: #c8c0b5; white-space: nowrap; }
-.loan-remove { background: none; border: none; color: #d8d2ca; cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; transition: color 0.15s; }
-.loan-remove:hover { color: #e07070; }
+    /* ── Loan card ── */
+    .loan-card {
+      background: #fff; border-radius: 16px; padding: 18px 18px 14px; margin-bottom: 10px;
+      border: 1px solid #e8e4de; box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .loan-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); border-color: #d8d2ca; }
+    .loan-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+    .loan-name-row { display: flex; align-items: flex-start; gap: 8px; }
+    .loan-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .loan-name { font-weight: 700; font-size: 15px; }
+    .loan-amount { font-size: 13px; margin-top: 2px; padding-left: 17px; color: #9a9288; }
+    .loan-amount-value { font-weight: 700; font-size: 14px; }
+    .loan-meta { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .loan-count { font-size: 11px; color: #c8c0b5; white-space: nowrap; }
+    .loan-remove { background: none; border: none; color: #d8d2ca; cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; transition: color 0.15s; }
+    .loan-remove:hover { color: #e07070; }
 
-/* ── Period row ── */
-.period-row {
-  display: flex; align-items: center; gap: 8px;
-  padding-left: 17px; margin-bottom: 12px; flex-wrap: wrap;
-}
-.period-text { font-size: 11px; color: #b5a898; }
-.period-badge {
-  font-size: 11px; font-weight: 600;
-  padding: 2px 9px; border-radius: 20px;
-}
+    /* ── Period row ── */
+    .period-row {
+      display: flex; align-items: center; gap: 8px;
+      padding-left: 17px; margin-bottom: 12px; flex-wrap: wrap;
+    }
+    .period-text { font-size: 11px; color: #b5a898; }
+    .period-badge {
+      font-size: 11px; font-weight: 600;
+      padding: 2px 9px; border-radius: 20px;
+    }
 
-/* ── Month grid ── */
-.month-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
-.month-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.month-label { font-size: 10px; color: #c8c0b5; }
-.check-btn {
-  width: 38px; height: 38px; border-radius: 10px; border: 1.5px solid;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  font-size: 16px; background: transparent; flex-shrink: 0;
-  transition: all 0.18s cubic-bezier(0.34,1.56,0.64,1);
-}
-.check-btn:hover:not(:disabled) { transform: scale(1.12); }
-.check-btn:disabled { cursor: default; border-color: #f0ece6 !important; background: #faf9f7 !important; color: #ece8e3 !important; }
-.month-label.out { color: #dedad5 !important; }
-.check-btn.pop { animation: pop 0.36s cubic-bezier(0.34,1.56,0.64,1); }
-@keyframes pop {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.35); }
-  100% { transform: scale(1); }
-}
-.progress-bg { background: #f0ece6; border-radius: 4px; height: 3px; width: 100%; margin-top: 12px; }
-.progress-fill { height: 3px; border-radius: 4px; transition: width 0.5s ease; }
+    /* ── Month grid ── */
+    .month-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+    .month-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .month-label { font-size: 10px; color: #c8c0b5; }
+    .check-btn {
+      width: 38px; height: 38px; border-radius: 10px; border: 1.5px solid;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 16px; background: transparent; flex-shrink: 0;
+      transition: all 0.18s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .check-btn:hover:not(:disabled) { transform: scale(1.12); }
+    .check-btn:disabled { cursor: default; border-color: #f0ece6 !important; background: #faf9f7 !important; color: #ece8e3 !important; }
+    .month-label.out { color: #dedad5 !important; }
+    .check-btn.pop { animation: pop 0.36s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes pop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.35); }
+      100% { transform: scale(1); }
+    }
+    .progress-bg { background: #f0ece6; border-radius: 4px; height: 3px; width: 100%; margin-top: 12px; }
+    .progress-fill { height: 3px; border-radius: 4px; transition: width 0.5s ease; }
 
-/* ── Add / Edit panel ── */
-.form-panel {
-  background: #fff; border: 1.5px dashed #c8e0cc;
-  border-radius: 16px; padding: 20px; margin-bottom: 10px;
-}
-.form-panel-title { font-weight: 700; font-size: 15px; margin-bottom: 16px; color: #2a2825; }
-.form-fields { display: flex; flex-direction: column; gap: 12px; }
-.field-label { font-size: 11px; color: #b5a898; font-weight: 500; letter-spacing: 0.5px; margin-bottom: 5px; }
-.field-pair { display: flex; gap: 8px; }
-select, input[type="text"], input[type="number"] {
-  background: #f9f7f4; border: 1px solid #e0dbd3; border-radius: 10px;
-  color: #2a2825; padding: 10px 14px; font-size: 14px;
-  font-family: inherit; outline: none; width: 100%;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-select {
-  appearance: none; -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c8c0b5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 12px center;
-  padding-right: 32px; cursor: pointer;
-}
-select:focus, input:focus { border-color: #7a9e80; box-shadow: 0 0 0 3px rgba(122,158,128,0.12); }
-input::placeholder { color: #c8c0b5; }
-.form-btns { display: flex; gap: 8px; margin-top: 4px; }
-.btn {
-  border: none; border-radius: 10px; padding: 10px 20px;
-  font-size: 13px; font-weight: 700; cursor: pointer;
-  font-family: inherit; transition: all 0.18s;
-}
-.btn:hover { transform: translateY(-1px); }
-.btn:active { transform: translateY(0); }
-.btn-primary { background: #6b8f71; color: #fff; flex: 1; box-shadow: 0 2px 8px rgba(107,143,113,0.25); }
-.btn-primary:hover { background: #5a7d60; }
-.btn-secondary { background: #f0ece6; color: #9a9288; }
-.btn-secondary:hover { background: #e8e4de; }
-.btn-add-new {
-  width: 100%; background: #fff; color: #7a9e80;
-  border: 1.5px dashed #c8e0cc; font-size: 13px;
-  border-radius: 14px; padding: 12px; cursor: pointer;
-  font-family: inherit; font-weight: 700;
-  transition: all 0.18s;
-}
-.btn-add-new:hover { background: #f4faf5; border-color: #7a9e80; transform: translateY(-1px); }
+    /* ── Add / Edit panel ── */
+    .form-panel {
+      background: #fff; border: 1.5px dashed #c8e0cc;
+      border-radius: 16px; padding: 20px; margin-bottom: 10px;
+    }
+    .form-panel-title { font-weight: 700; font-size: 15px; margin-bottom: 16px; color: #2a2825; }
+    .form-fields { display: flex; flex-direction: column; gap: 12px; }
+    .field-label { font-size: 11px; color: #b5a898; font-weight: 500; letter-spacing: 0.5px; margin-bottom: 5px; }
+    .field-pair { display: flex; gap: 8px; }
+    select, input[type="text"], input[type="number"] {
+      background: #f9f7f4; border: 1px solid #e0dbd3; border-radius: 10px;
+      color: #2a2825; padding: 10px 14px; font-size: 14px;
+      font-family: inherit; outline: none; width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    select {
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c8c0b5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center;
+      padding-right: 32px; cursor: pointer;
+    }
+    select:focus, input:focus { border-color: #7a9e80; box-shadow: 0 0 0 3px rgba(122,158,128,0.12); }
+    input::placeholder { color: #c8c0b5; }
+    .form-btns { display: flex; gap: 8px; margin-top: 4px; }
+    .btn {
+      border: none; border-radius: 10px; padding: 10px 20px;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      font-family: inherit; transition: all 0.18s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-primary { background: #6b8f71; color: #fff; flex: 1; box-shadow: 0 2px 8px rgba(107,143,113,0.25); }
+    .btn-primary:hover { background: #5a7d60; }
+    .btn-secondary { background: #f0ece6; color: #9a9288; }
+    .btn-secondary:hover { background: #e8e4de; }
+    .btn-add-new {
+      width: 100%; background: #fff; color: #7a9e80;
+      border: 1.5px dashed #c8e0cc; font-size: 13px;
+      border-radius: 14px; padding: 12px; cursor: pointer;
+      font-family: inherit; font-weight: 700;
+      transition: all 0.18s;
+    }
+    .btn-add-new:hover { background: #f4faf5; border-color: #7a9e80; transform: translateY(-1px); }
 
-.footer-note { margin-top: 16px; text-align: center; color: #d0c8be; font-size: 11px; }
+    .footer-note { margin-top: 16px; text-align: center; color: #d0c8be; font-size: 11px; }
 
-/* ── Mode toggle ── */
-.mode-toggle {
-  display: flex; gap: 0; background: #f0ece6; border-radius: 10px; padding: 3px;
-}
-.mode-btn {
-  flex: 1; border: none; border-radius: 8px; padding: 8px 10px;
-  font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;
-  background: transparent; color: #9a9288; transition: all 0.18s;
-}
-.mode-btn.active { background: #fff; color: #2a2825; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    /* ── Mode toggle ── */
+    .mode-toggle {
+      display: flex; gap: 0; background: #f0ece6; border-radius: 10px; padding: 3px;
+    }
+    .mode-btn {
+      flex: 1; border: none; border-radius: 8px; padding: 8px 10px;
+      font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;
+      background: transparent; color: #9a9288; transition: all 0.18s;
+    }
+    .mode-btn.active { background: #fff; color: #2a2825; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
 
-/* ── Calc preview ── */
-.calc-preview {
-  margin-top: 8px; padding: 10px 12px; border-radius: 10px;
-  background: #f9f7f4; border: 1px solid #e8e4de;
-  font-size: 12px; color: #7a7068; line-height: 1.7;
-  min-height: 0; transition: all 0.2s;
-}
-.calc-preview:empty { display: none; }
-.calc-preview b { color: #2a2825; font-weight: 700; }
+    /* ── Calc preview ── */
+    .calc-preview {
+      margin-top: 8px; padding: 10px 12px; border-radius: 10px;
+      background: #f9f7f4; border: 1px solid #e8e4de;
+      font-size: 12px; color: #7a7068; line-height: 1.7;
+      min-height: 0; transition: all 0.2s;
+    }
+    .calc-preview:empty { display: none; }
+    .calc-preview b { color: #2a2825; font-weight: 700; }
 
-/* ── Backup bar ── */
-.backup-bar {
-  display: flex; gap: 8px; margin-top: 12px;
-}
-.backup-btn {
-  flex: 1; background: #fff; border: 1px solid #e8e4de;
-  border-radius: 12px; padding: 11px 10px;
-  font-size: 12px; font-weight: 700; color: #7a7068;
-  cursor: pointer; font-family: inherit;
-  transition: all 0.18s;
-  display: flex; align-items: center; justify-content: center; gap: 5px;
-}
-.backup-btn:hover { background: #f5f3ef; border-color: #d0c8be; color: #2a2825; transform: translateY(-1px); }
-.backup-btn:active { transform: translateY(0); }
+    /* ── Backup bar ── */
+    .backup-bar {
+      display: flex; gap: 8px; margin-top: 12px;
+    }
+    .backup-btn {
+      flex: 1; background: #fff; border: 1px solid #e8e4de;
+      border-radius: 12px; padding: 11px 10px;
+      font-size: 12px; font-weight: 700; color: #7a7068;
+      cursor: pointer; font-family: inherit;
+      transition: all 0.18s;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+    }
+    .backup-btn:hover { background: #f5f3ef; border-color: #d0c8be; color: #2a2825; transform: translateY(-1px); }
+    .backup-btn:active { transform: translateY(0); }
 
-/* ── Toast ── */
-.toast {
-  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
-  background: #2a2825; color: #fff; padding: 10px 20px;
-  border-radius: 20px; font-size: 13px; font-weight: 500;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
-  opacity: 0; pointer-events: none; white-space: nowrap; z-index: 999;
-}
-.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: #2a2825; color: #fff; padding: 10px 20px;
+      border-radius: 20px; font-size: 13px; font-weight: 500;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+      opacity: 0; pointer-events: none; white-space: nowrap; z-index: 999;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-/* ── Cumulative amount ── */
-.summary-cumulative {
-  display: flex; align-items: baseline; gap: 6px; margin-bottom: 8px;
-}
-.summary-cumulative-label { color: #b5a898; font-size: 11px; }
-.summary-cumulative-value {
-  font-size: 17px; font-weight: 700; color: #2a2825;
-  font-variant-numeric: tabular-nums;
-}
-.summary-cumulative-sub { color: #c8c0b5; font-size: 11px; }
+    /* ── Cumulative amount ── */
+    .summary-cumulative {
+      display: flex; align-items: baseline; gap: 6px; margin-bottom: 8px;
+    }
+    .summary-cumulative-label { color: #b5a898; font-size: 11px; }
+    .summary-cumulative-value {
+      font-size: 17px; font-weight: 700; color: #2a2825;
+      font-variant-numeric: tabular-nums;
+    }
+    .summary-cumulative-sub { color: #c8c0b5; font-size: 11px; }
 
-.loan-cumulative {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 12px; border-radius: 10px; margin-bottom: 10px;
-}
-.loan-cumulative-label { font-size: 11px; color: #9a9288; }
-.loan-cumulative-right { display: flex; align-items: baseline; gap: 5px; }
-.loan-cumulative-value {
-  font-size: 16px; font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  transition: color 0.2s;
-}
-.loan-cumulative-total { font-size: 11px; color: #c8c0b5; }
+    .loan-cumulative {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 12px; border-radius: 10px; margin-bottom: 10px;
+    }
+    .loan-cumulative-label { font-size: 11px; color: #9a9288; }
+    .loan-cumulative-right { display: flex; align-items: baseline; gap: 5px; }
+    .loan-cumulative-value {
+      font-size: 16px; font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      transition: color 0.2s;
+    }
+    .loan-cumulative-total { font-size: 11px; color: #c8c0b5; }
 
-/* count-up animation */
-@keyframes countUp {
-  from { opacity: 0.4; transform: translateY(4px); }
-  to   { opacity: 1;   transform: translateY(0); }
-}
-.count-pop { animation: countUp 0.35s ease; }
-```
-
+    /* count-up animation */
+    @keyframes countUp {
+      from { opacity: 0.4; transform: translateY(4px); }
+      to   { opacity: 1;   transform: translateY(0); }
+    }
+    .count-pop { animation: countUp 0.35s ease; }
   </style>
 </head>
 <body>
@@ -282,17 +278,19 @@ input::placeholder { color: #c8c0b5; }
   </div>
 
   <!-- Loan cards -->
-
   <div id="loanCards"></div>
 
   <!-- Add form -->
-
   <div id="formPanel" class="form-panel" style="display:none;">
     <div class="form-panel-title" id="formTitle">ローンを追加</div>
     <div class="form-fields">
       <div>
         <div class="field-label">ローン名</div>
         <input type="text" id="fName" placeholder="例: 奨学金" />
+      </div>
+      <div>
+        <div class="field-label">月々の返済額（円）</div>
+        <input type="number" id="fAmount" placeholder="例: 12300" />
       </div>
       <div>
         <div class="field-label">返済開始</div>
@@ -308,52 +306,29 @@ input::placeholder { color: #c8c0b5; }
           <select id="fEndMonth"></select>
         </div>
       </div>
-
-```
-  <!-- input mode toggle -->
-  <div>
-    <div class="field-label">金額の入力方法</div>
-    <div class="mode-toggle">
-      <button class="mode-btn active" id="modeMonthly" onclick="setMode('monthly')">月額で入力</button>
-      <button class="mode-btn" id="modeTotal" onclick="setMode('total')">総額で入力</button>
-    </div>
-  </div>
-
-  <!-- monthly mode -->
-  <div id="monthlyFields">
-    <div class="field-label">月々の返済額（円）</div>
-    <input type="number" id="fAmount" placeholder="例: 12300" />
-    <div class="calc-preview" id="previewFromMonthly"></div>
-  </div>
-
-  <!-- total mode -->
-  <div id="totalFields" style="display:none;">
-    <div class="field-label">返済総額（円）</div>
-    <input type="number" id="fTotal" placeholder="例: 1476000" />
-    <div class="calc-preview" id="previewFromTotal"></div>
-    <!-- remainder -->
-    <div id="remainderRow" style="display:none; margin-top:10px;">
-      <div class="field-label">端数 <span id="remainderAmt" style="color:#e8a87c;font-weight:700;"></span> の調整</div>
-      <div class="mode-toggle" style="margin-top:6px;">
-        <button class="mode-btn active" id="adjFirst" onclick="setAdj('first')">最初の月に加算</button>
-        <button class="mode-btn" id="adjLast" onclick="setAdj('last')">最後の月に加算</button>
+      <div>
+        <div class="field-label">端数の調整</div>
+        <div class="field-label" style="margin-bottom:8px;color:#c8c0b5;font-size:10px;">月額×月数で割り切れない場合、差額をどこに乗せるか</div>
+        <div class="mode-toggle">
+          <button class="mode-btn active" id="adjFirst" onclick="setAdj('first')">最初の月に加算</button>
+          <button class="mode-btn" id="adjLast"  onclick="setAdj('last')">最後の月に加算</button>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">返済総額（参考）</div>
+        <input type="number" id="fTotal" placeholder="例: 1476300（任意）" />
+        <div class="calc-preview" id="calcPreview"></div>
+      </div>
+      <div class="form-btns">
+        <button class="btn btn-primary" id="fConfirm">保存する</button>
+        <button class="btn btn-secondary" id="fCancel">キャンセル</button>
       </div>
     </div>
   </div>
 
-  <div class="form-btns">
-    <button class="btn btn-primary" id="fConfirm">保存する</button>
-    <button class="btn btn-secondary" id="fCancel">キャンセル</button>
-  </div>
-</div>
-```
-
-  </div>
-
-<button class="btn-add-new" id="showAddBtn">＋ ローンを追加</button>
+  <button class="btn-add-new" id="showAddBtn">＋ ローンを追加</button>
 
   <!-- Backup / Restore -->
-
   <div class="backup-bar">
     <button class="backup-btn" id="exportBtn">⬇ バックアップを保存</button>
     <button class="backup-btn" id="importBtn">⬆ バックアップを読み込む</button>
@@ -546,7 +521,7 @@ input::placeholder { color: #c8c0b5; }
     const viewPaid = MO.filter((_,i) => inRange(loan,viewYear,i+1) && payments[pkey(loan.id,viewYear,i+1)]).length;
     const viewTotal = MO.filter((_,i) => inRange(loan,viewYear,i+1)).length;
     const pct = viewTotal === 0 ? 0 : Math.round(viewPaid/viewTotal*100);
-    const rem = remainingMonths(loan);
+    const remMonths = remainingMonths(loan);
     const ended = isEnded(loan);
 
     const card = document.createElement("div");
@@ -606,21 +581,25 @@ input::placeholder { color: #c8c0b5; }
       const b = document.createElement("span");
       b.className = "period-badge";
       b.style.cssText = `background:${loan.color}18;color:${loan.color};`;
-      b.textContent = `残 ${rem}ヶ月`; pr.appendChild(b);
+      b.textContent = `残 ${remMonths}ヶ月`; pr.appendChild(b);
     }
     card.appendChild(pr);
 
     /* cumulative paid for this loan */
-    const loanPaid = paidAllTime(loan) * loan.amount;
-    const loanTotal = totalMonths(loan) * loan.amount;
-    const lc = document.createElement("div");
-    lc.className = "loan-cumulative";
-    lc.style.background = loan.color + "10";
+    const loanPaid  = paidYenAllTime(loan);
+    const loanTotal = totalYen(loan);
+    const remYen = loan.remainder || 0;
+    const remNote = remYen > 0
+      ? `<span style="font-size:10px;color:#c8c0b5;margin-left:4px;">（端数¥${remYen.toLocaleString()}含む）</span>`
+      : '';
+    const lc = document.createElement('div');
+    lc.className = 'loan-cumulative';
+    lc.style.background = loan.color + '10';
     lc.innerHTML = `
       <span class="loan-cumulative-label">累計支払額</span>
       <div class="loan-cumulative-right">
         <span class="loan-cumulative-value" id="lcv-${loan.id}" style="color:${loan.color}">¥${loanPaid.toLocaleString()}</span>
-        <span class="loan-cumulative-total">/ ¥${loanTotal.toLocaleString()}</span>
+        <span class="loan-cumulative-total">/ ¥${loanTotal.toLocaleString()}${remNote}</span>
       </div>`;
     card.appendChild(lc);
     const grid = document.createElement("div");
@@ -645,6 +624,8 @@ input::placeholder { color: #c8c0b5; }
         btn.disabled = true;
       } else {
         styleBtn(btn, loan, month, isNow);
+        const yen = amountForMonth(loan, viewYear, month);
+        btn.title = `¥${yen.toLocaleString()}`;
         btn.onclick = () => toggle(loan, month, isNow);
       }
       cell.append(lbl, btn);
@@ -686,7 +667,7 @@ input::placeholder { color: #c8c0b5; }
     if (c) c.textContent = `${totP}/${totM}ヶ月`;
     // update loan cumulative
     const lcv = document.getElementById(`lcv-${loan.id}`);
-    if (lcv) animateValue(`lcv-${loan.id}`, totP * loan.amount);
+    if (lcv) animateValue(`lcv-${loan.id}`, paidYenAllTime(loan));
     // update bar
     const viewPaid = MO.filter((_,i) => inRange(loan,viewYear,i+1) && payments[pkey(loan.id,viewYear,i+1)]).length;
     const viewTotal = MO.filter((_,i) => inRange(loan,viewYear,i+1)).length;
@@ -697,21 +678,13 @@ input::placeholder { color: #c8c0b5; }
   }
 
   /* ── Form state ─────────────────────────── */
-  let inputMode = 'monthly'; // 'monthly' | 'total'
-  let adjMode   = 'first';   // 'first' | 'last'
+  let adjMode = 'first'; // 'first' | 'last'
 
-  function setMode(m) {
-    inputMode = m;
-    document.getElementById('modeMonthly').classList.toggle('active', m === 'monthly');
-    document.getElementById('modeTotal').classList.toggle('active', m === 'total');
-    document.getElementById('monthlyFields').style.display = m === 'monthly' ? '' : 'none';
-    document.getElementById('totalFields').style.display   = m === 'total'   ? '' : 'none';
-    updatePreview();
-  }
   function setAdj(a) {
     adjMode = a;
     document.getElementById('adjFirst').classList.toggle('active', a === 'first');
     document.getElementById('adjLast').classList.toggle('active',  a === 'last');
+    updatePreview();
   }
 
   function getFormMonths() {
@@ -719,41 +692,40 @@ input::placeholder { color: #c8c0b5; }
     const sm = Number(document.getElementById('fStartMonth').value);
     const ey = Number(document.getElementById('fEndYear').value);
     const em = Number(document.getElementById('fEndMonth').value);
+    if (!sy || !sm || !ey || !em) return 0;
     return (ey - sy) * 12 + (em - sm) + 1;
   }
 
   function updatePreview() {
+    const el     = document.getElementById('calcPreview');
+    const amount = Number(document.getElementById('fAmount').value);
+    const total  = Number(document.getElementById('fTotal').value);
     const months = getFormMonths();
-    if (months <= 0) return;
-    if (inputMode === 'monthly') {
-      const amt = Number(document.getElementById('fAmount').value);
-      const el = document.getElementById('previewFromMonthly');
-      if (!amt) { el.innerHTML = ''; return; }
-      const total = amt * months;
-      el.innerHTML = `<b>¥${amt.toLocaleString()}</b> × ${months}ヶ月 = 総額 <b>¥${total.toLocaleString()}</b>`;
-    } else {
-      const tot = Number(document.getElementById('fTotal').value);
-      const el = document.getElementById('previewFromTotal');
-      const remRow = document.getElementById('remainderRow');
-      const remAmt = document.getElementById('remainderAmt');
-      if (!tot) { el.innerHTML = ''; remRow.style.display = 'none'; return; }
-      const base = Math.floor(tot / months);
-      const rem  = tot - base * months;
-      if (rem === 0) {
-        el.innerHTML = `総額 <b>¥${tot.toLocaleString()}</b> ÷ ${months}ヶ月 = 月額 <b>¥${base.toLocaleString()}</b>`;
-        remRow.style.display = 'none';
+    if (!el) return;
+
+    if (!amount || months <= 0) { el.innerHTML = ''; return; }
+
+    const calcTotal = amount * months;
+    const adjLabel  = adjMode === 'first' ? '最初の月' : '最後の月';
+
+    if (total && total !== calcTotal) {
+      // user entered a total — show remainder
+      const rem = total - calcTotal;
+      if (rem > 0) {
+        el.innerHTML = `月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = <b>¥${calcTotal.toLocaleString()}</b><br>`
+          + `総額との差額 <b style="color:#e8a87c">¥${rem.toLocaleString()}</b> → ${adjLabel}に加算<br>`
+          + `実際の総額: <b>¥${total.toLocaleString()}</b>`;
       } else {
-        el.innerHTML = `総額 <b>¥${tot.toLocaleString()}</b> ÷ ${months}ヶ月<br>月額 <b>¥${base.toLocaleString()}</b>（端数 <b style="color:#e8a87c">¥${rem.toLocaleString()}</b>）`;
-        remAmt.textContent = '¥' + rem.toLocaleString();
-        remRow.style.display = '';
+        el.innerHTML = `月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = <b>¥${calcTotal.toLocaleString()}</b>`;
       }
+    } else {
+      el.innerHTML = `月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = 総額 <b>¥${calcTotal.toLocaleString()}</b>`;
     }
   }
 
-  // live preview on input/select change
   ['fAmount','fTotal','fStartYear','fStartMonth','fEndYear','fEndMonth'].forEach(id => {
-    document.getElementById(id).addEventListener('input', updatePreview);
-    document.getElementById(id).addEventListener('change', updatePreview);
+    const el = document.getElementById(id);
+    if (el) { el.addEventListener('input', updatePreview); el.addEventListener('change', updatePreview); }
   });
 
   /* ── Form (add / edit) ───────────────────── */
@@ -761,15 +733,13 @@ input::placeholder { color: #c8c0b5; }
     editingId = null;
     document.getElementById('formTitle').textContent = 'ローンを追加';
     document.getElementById('fConfirm').textContent  = '追加する';
-    document.getElementById('fName').value    = '';
-    document.getElementById('fAmount').value  = '';
-    document.getElementById('fTotal').value   = '';
-    document.getElementById('previewFromMonthly').innerHTML = '';
-    document.getElementById('previewFromTotal').innerHTML   = '';
-    document.getElementById('remainderRow').style.display  = 'none';
+    document.getElementById('fName').value   = '';
+    document.getElementById('fAmount').value = '';
+    document.getElementById('fTotal').value  = '';
+    document.getElementById('calcPreview').innerHTML = '';
     fillYears('fStartYear', TY); fillMonths('fStartMonth', TM);
     fillYears('fEndYear', TY+5); fillMonths('fEndMonth', TM === 1 ? 12 : TM-1);
-    setMode('monthly'); setAdj('first');
+    setAdj('first');
     showForm();
   }
 
@@ -779,13 +749,10 @@ input::placeholder { color: #c8c0b5; }
     document.getElementById('fConfirm').textContent  = '保存する';
     document.getElementById('fName').value   = loan.name;
     document.getElementById('fAmount').value = loan.amount;
-    document.getElementById('fTotal').value  = '';
-    document.getElementById('previewFromMonthly').innerHTML = '';
-    document.getElementById('previewFromTotal').innerHTML   = '';
-    document.getElementById('remainderRow').style.display   = 'none';
+    document.getElementById('fTotal').value  = loan.remainder ? (loan.amount * totalMonths(loan) + loan.remainder) : '';
     fillYears('fStartYear', loan.startYear); fillMonths('fStartMonth', loan.startMonth);
     fillYears('fEndYear',   loan.endYear);   fillMonths('fEndMonth',   loan.endMonth);
-    setMode(loan.inputMode || 'monthly'); setAdj(loan.adjMode || 'first');
+    setAdj(loan.adjMode || 'first');
     updatePreview();
     showForm();
   }
@@ -804,33 +771,21 @@ input::placeholder { color: #c8c0b5; }
   document.getElementById('showAddBtn').onclick = openAdd;
   document.getElementById('fCancel').onclick    = closeForm;
   document.getElementById('fConfirm').onclick   = () => {
-    const name = document.getElementById('fName').value.trim();
-    const sy   = Number(document.getElementById('fStartYear').value);
-    const sm   = Number(document.getElementById('fStartMonth').value);
-    const ey   = Number(document.getElementById('fEndYear').value);
-    const em   = Number(document.getElementById('fEndMonth').value);
-    if (!name) { alert('ローン名を入力してください'); return; }
+    const name   = document.getElementById('fName').value.trim();
+    const amount = Number(document.getElementById('fAmount').value);
+    const total  = Number(document.getElementById('fTotal').value);
+    const sy = Number(document.getElementById('fStartYear').value);
+    const sm = Number(document.getElementById('fStartMonth').value);
+    const ey = Number(document.getElementById('fEndYear').value);
+    const em = Number(document.getElementById('fEndMonth').value);
+    if (!name)   { alert('ローン名を入力してください'); return; }
+    if (!amount) { alert('月々の返済額を入力してください'); return; }
     if (ey*100+em < sy*100+sm) { alert('終了は開始より後の月を設定してください'); return; }
 
-    const months = getFormMonths();
-    let amount, remainder = 0;
+    const months    = (ey - sy) * 12 + (em - sm) + 1;
+    const remainder = total > 0 ? Math.max(0, total - amount * months) : 0;
 
-    if (inputMode === 'monthly') {
-      amount = Number(document.getElementById('fAmount').value);
-      if (!amount) { alert('月々の返済額を入力してください'); return; }
-    } else {
-      const tot = Number(document.getElementById('fTotal').value);
-      if (!tot) { alert('返済総額を入力してください'); return; }
-      amount    = Math.floor(tot / months);
-      remainder = tot - amount * months;
-    }
-
-    const loanData = {
-      name, amount, remainder, adjMode,
-      startYear: sy, startMonth: sm, endYear: ey, endMonth: em,
-      inputMode,
-    };
-
+    const loanData = { name, amount, remainder, adjMode, startYear: sy, startMonth: sm, endYear: ey, endMonth: em };
     if (editingId === null) {
       loans.push({ id: Date.now(), color: COLORS[loans.length % COLORS.length], ...loanData });
     } else {
@@ -901,6 +856,5 @@ input::placeholder { color: #c8c0b5; }
     reader.readAsText(file);
   };
 </script>
-
 </body>
 </html>
