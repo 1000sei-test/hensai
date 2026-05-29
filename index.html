@@ -10,230 +10,154 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 16px; -webkit-text-size-adjust: 100%; }
-    body {
-      background: #f5f3ef;
-      color: #2a2825;
-      font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
-      min-height: 100dvh;
-      padding-bottom: 80px;
-    }
+    body { background: #f5f3ef; color: #2a2825; font-family: 'Noto Sans JP','Hiragino Sans',sans-serif; min-height:100dvh; padding-bottom:80px; }
 
-    /* ── Header ── */
-    .header {
-      background: #fff; border-bottom: 1px solid #e8e4de;
-      position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 1px 12px rgba(0,0,0,0.04);
-    }
-    .header-inner {
-      max-width: 560px; margin: 0 auto; padding: 14px 20px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .header-label { font-size: 10px; color: #b5a898; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; }
-    .header-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: #2a2825; margin-top: 1px; }
-    .year-selector {
-      display: flex; align-items: center; gap: 6px;
-      background: #f5f3ef; border-radius: 10px; padding: 6px 10px; border: 1px solid #e8e4de;
-    }
-    .year-btn { background: none; border: none; color: #b5a898; cursor: pointer; font-size: 18px; line-height: 1; padding: 0 2px; transition: color 0.15s; }
-    .year-btn:hover { color: #6b8f71; }
-    .year-text { font-size: 14px; font-weight: 700; min-width: 38px; text-align: center; color: #2a2825; }
+    /* Header */
+    .header { background:#fff; border-bottom:1px solid #e8e4de; position:sticky; top:0; z-index:100; box-shadow:0 1px 12px rgba(0,0,0,.04); }
+    .header-inner { max-width:560px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; }
+    .header-label { font-size:10px; color:#b5a898; font-weight:500; letter-spacing:2.5px; text-transform:uppercase; }
+    .header-title { font-family:'DM Serif Display',serif; font-size:22px; margin-top:1px; }
+    .year-sel { display:flex; align-items:center; gap:6px; background:#f5f3ef; border-radius:10px; padding:6px 10px; border:1px solid #e8e4de; }
+    .year-btn { background:none; border:none; color:#b5a898; cursor:pointer; font-size:18px; line-height:1; padding:0 2px; transition:color .15s; }
+    .year-btn:hover { color:#6b8f71; }
+    .year-txt { font-size:14px; font-weight:700; min-width:38px; text-align:center; }
 
-    main { max-width: 560px; margin: 0 auto; padding: 20px 16px; }
+    main { max-width:560px; margin:0 auto; padding:20px 16px; }
 
-    /* ── Summary card ── */
-    .summary-card {
-      background: #fff; border: 1px solid #e8e4de; border-radius: 20px;
-      padding: 22px 20px; margin-bottom: 16px;
-      display: flex; align-items: center; gap: 20px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.04);
-    }
-    .summary-ring { position: relative; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .ring-svg { transform: rotate(-90deg); }
-    .ring-bg { fill: none; stroke: #ede9e3; stroke-width: 6; }
-    .ring-fg { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.8s cubic-bezier(.4,0,.2,1); }
-    .ring-label { position: absolute; font-size: 14px; font-weight: 700; color: #2a2825; }
-    .summary-info { flex: 1; min-width: 0; }
-    .summary-year { color: #b5a898; font-size: 11px; margin-bottom: 5px; }
-    .summary-amount-label { color: #7a9e80; font-size: 12px; font-weight: 500; }
-    .summary-amount-value { font-size: 22px; font-weight: 700; color: #2a2825; display: block; margin-top: 1px; margin-bottom: 2px; }
-    .summary-amount-total { color: #c8c0b5; font-size: 12px; margin-bottom: 10px; display: block; }
-    .tags { display: flex; gap: 5px; flex-wrap: wrap; }
-    .tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+    /* Summary */
+    .summary-card { background:#fff; border:1px solid #e8e4de; border-radius:20px; padding:22px 20px; margin-bottom:16px; display:flex; align-items:center; gap:20px; box-shadow:0 2px 16px rgba(0,0,0,.04); }
+    .sum-ring { position:relative; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .ring-svg { transform:rotate(-90deg); }
+    .ring-bg { fill:none; stroke:#ede9e3; stroke-width:6; }
+    .ring-fg { fill:none; stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .8s cubic-bezier(.4,0,.2,1); }
+    .ring-lbl { position:absolute; font-size:14px; font-weight:700; }
+    .sum-info { flex:1; min-width:0; }
+    .sum-sub { color:#b5a898; font-size:11px; margin-bottom:5px; }
+    .cum-row { display:flex; align-items:baseline; gap:6px; margin-bottom:7px; }
+    .cum-lbl { color:#b5a898; font-size:11px; }
+    .cum-val { font-size:17px; font-weight:700; font-variant-numeric:tabular-nums; }
+    .cum-of  { color:#c8c0b5; font-size:11px; }
+    .now-lbl { color:#7a9e80; font-size:12px; font-weight:500; }
+    .now-val { font-size:22px; font-weight:700; display:block; margin-top:1px; margin-bottom:2px; }
+    .now-of  { color:#c8c0b5; font-size:12px; margin-bottom:10px; display:block; }
+    .tags { display:flex; gap:5px; flex-wrap:wrap; }
+    .tag { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:500; }
 
-    /* ── Loan card ── */
-    .loan-card {
-      background: #fff; border-radius: 16px; padding: 18px 18px 14px; margin-bottom: 10px;
-      border: 1px solid #e8e4de; box-shadow: 0 1px 8px rgba(0,0,0,0.03);
-      transition: box-shadow 0.2s, border-color 0.2s;
-    }
-    .loan-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); border-color: #d8d2ca; }
-    .loan-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
-    .loan-name-row { display: flex; align-items: flex-start; gap: 8px; }
-    .loan-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-    .loan-name { font-weight: 700; font-size: 15px; }
-    .loan-amount { font-size: 13px; margin-top: 2px; padding-left: 17px; color: #9a9288; }
-    .loan-amount-value { font-weight: 700; font-size: 14px; }
-    .loan-meta { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-    .loan-count { font-size: 11px; color: #c8c0b5; white-space: nowrap; }
-    .loan-remove { background: none; border: none; color: #d8d2ca; cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; transition: color 0.15s; }
-    .loan-remove:hover { color: #e07070; }
+    /* Loan card */
+    .loan-card { background:#fff; border-radius:16px; padding:18px 18px 14px; margin-bottom:10px; border:1px solid #e8e4de; box-shadow:0 1px 8px rgba(0,0,0,.03); transition:box-shadow .2s,border-color .2s; }
+    .loan-card:hover { box-shadow:0 4px 20px rgba(0,0,0,.07); border-color:#d8d2ca; }
+    .loan-hdr { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px; }
+    .loan-name-row { display:flex; align-items:flex-start; gap:8px; }
+    .loan-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+    .loan-name { font-weight:700; font-size:15px; }
+    .loan-amt  { font-size:13px; margin-top:2px; padding-left:17px; color:#9a9288; }
+    .loan-amt-val { font-weight:700; font-size:14px; }
+    .loan-meta { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+    .loan-cnt  { font-size:11px; color:#c8c0b5; white-space:nowrap; }
+    .icon-btn  { background:none; border:none; color:#d8d2ca; cursor:pointer; font-size:16px; line-height:1; padding:2px 4px; transition:color .15s; }
+    .icon-btn:hover { color:#9a9288; }
+    .icon-btn.del:hover { color:#e07070; }
 
-    /* ── Period row ── */
-    .period-row {
-      display: flex; align-items: center; gap: 8px;
-      padding-left: 17px; margin-bottom: 12px; flex-wrap: wrap;
-    }
-    .period-text { font-size: 11px; color: #b5a898; }
-    .period-badge {
-      font-size: 11px; font-weight: 600;
-      padding: 2px 9px; border-radius: 20px;
-    }
+    /* Period row */
+    .period-row { display:flex; align-items:center; gap:8px; padding-left:17px; margin-bottom:10px; flex-wrap:wrap; }
+    .period-txt { font-size:11px; color:#b5a898; }
+    .period-badge { font-size:11px; font-weight:600; padding:2px 9px; border-radius:20px; }
 
-    /* ── Month grid ── */
-    .month-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
-    .month-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .month-label { font-size: 10px; color: #c8c0b5; }
+    /* Cumulative row */
+    .loan-cum { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; border-radius:10px; margin-bottom:10px; }
+    .loan-cum-lbl { font-size:11px; color:#9a9288; }
+    .loan-cum-right { display:flex; align-items:baseline; gap:5px; }
+    .loan-cum-val { font-size:16px; font-weight:700; font-variant-numeric:tabular-nums; }
+    .loan-cum-of  { font-size:11px; color:#c8c0b5; }
+
+    /* Prepayment row */
+    .prepay-row { display:flex; align-items:center; justify-content:space-between; padding:7px 12px; border-radius:10px; margin-bottom:10px; background:#faf9f7; border:1px solid #f0ece6; }
+    .prepay-lbl { font-size:11px; color:#9a9288; }
+    .prepay-right { display:flex; align-items:center; gap:6px; }
+    .prepay-val { font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; color:#6b8f71; }
+    .prepay-edit-btn { font-size:11px; color:#b5a898; background:#f0ece6; border:none; border-radius:6px; padding:3px 8px; cursor:pointer; font-family:inherit; transition:all .15s; }
+    .prepay-edit-btn:hover { background:#e8e4de; color:#2a2825; }
+
+    /* Month grid */
+    .month-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; }
+    .month-cell { display:flex; flex-direction:column; align-items:center; gap:4px; }
+    .month-lbl  { font-size:10px; color:#c8c0b5; }
+    .month-lbl.out { color:#dedad5 !important; }
     .check-btn {
-      width: 38px; height: 38px; border-radius: 10px; border: 1.5px solid;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-size: 16px; background: transparent; flex-shrink: 0;
-      transition: all 0.18s cubic-bezier(0.34,1.56,0.64,1);
+      width:38px; height:38px; border-radius:10px; border:1.5px solid;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      font-size:16px; background:transparent; flex-shrink:0;
+      transition:all .18s cubic-bezier(.34,1.56,.64,1);
     }
-    .check-btn:hover:not(:disabled) { transform: scale(1.12); }
-    .check-btn:disabled { cursor: default; border-color: #f0ece6 !important; background: #faf9f7 !important; color: #ece8e3 !important; }
-    .month-label.out { color: #dedad5 !important; }
-    .check-btn.pop { animation: pop 0.36s cubic-bezier(0.34,1.56,0.64,1); }
-    @keyframes pop {
-      0%   { transform: scale(1); }
-      50%  { transform: scale(1.35); }
-      100% { transform: scale(1); }
-    }
-    .progress-bg { background: #f0ece6; border-radius: 4px; height: 3px; width: 100%; margin-top: 12px; }
-    .progress-fill { height: 3px; border-radius: 4px; transition: width 0.5s ease; }
+    .check-btn:hover:not(:disabled) { transform:scale(1.12); }
+    .check-btn:disabled { cursor:default; border-color:#f0ece6 !important; background:#faf9f7 !important; color:#ece8e3 !important; }
+    .check-btn.pop { animation:pop .36s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+    .progress-bg   { background:#f0ece6; border-radius:4px; height:3px; width:100%; margin-top:12px; }
+    .progress-fill { height:3px; border-radius:4px; transition:width .5s ease; }
 
-    /* ── Add / Edit panel ── */
-    .form-panel {
-      background: #fff; border: 1.5px dashed #c8e0cc;
-      border-radius: 16px; padding: 20px; margin-bottom: 10px;
+    /* Form panel */
+    .form-panel { background:#fff; border:1.5px dashed #c8e0cc; border-radius:16px; padding:20px; margin-bottom:10px; }
+    .form-title  { font-weight:700; font-size:15px; margin-bottom:16px; }
+    .form-fields { display:flex; flex-direction:column; gap:12px; }
+    .field-lbl   { font-size:11px; color:#b5a898; font-weight:500; letter-spacing:.5px; margin-bottom:5px; }
+    .field-hint  { font-size:10px; color:#c8c0b5; margin-bottom:8px; }
+    .field-pair  { display:flex; gap:8px; }
+    select, input[type=text], input[type=number] {
+      background:#f9f7f4; border:1px solid #e0dbd3; border-radius:10px;
+      color:#2a2825; padding:10px 14px; font-size:14px;
+      font-family:inherit; outline:none; width:100%;
+      transition:border-color .2s,box-shadow .2s;
     }
-    .form-panel-title { font-weight: 700; font-size: 15px; margin-bottom: 16px; color: #2a2825; }
-    .form-fields { display: flex; flex-direction: column; gap: 12px; }
-    .field-label { font-size: 11px; color: #b5a898; font-weight: 500; letter-spacing: 0.5px; margin-bottom: 5px; }
-    .field-pair { display: flex; gap: 8px; }
-    select, input[type="text"], input[type="number"] {
-      background: #f9f7f4; border: 1px solid #e0dbd3; border-radius: 10px;
-      color: #2a2825; padding: 10px 14px; font-size: 14px;
-      font-family: inherit; outline: none; width: 100%;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    select {
-      appearance: none; -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c8c0b5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 12px center;
-      padding-right: 32px; cursor: pointer;
-    }
-    select:focus, input:focus { border-color: #7a9e80; box-shadow: 0 0 0 3px rgba(122,158,128,0.12); }
-    input::placeholder { color: #c8c0b5; }
-    .form-btns { display: flex; gap: 8px; margin-top: 4px; }
-    .btn {
-      border: none; border-radius: 10px; padding: 10px 20px;
-      font-size: 13px; font-weight: 700; cursor: pointer;
-      font-family: inherit; transition: all 0.18s;
-    }
-    .btn:hover { transform: translateY(-1px); }
-    .btn:active { transform: translateY(0); }
-    .btn-primary { background: #6b8f71; color: #fff; flex: 1; box-shadow: 0 2px 8px rgba(107,143,113,0.25); }
-    .btn-primary:hover { background: #5a7d60; }
-    .btn-secondary { background: #f0ece6; color: #9a9288; }
-    .btn-secondary:hover { background: #e8e4de; }
-    .btn-add-new {
-      width: 100%; background: #fff; color: #7a9e80;
-      border: 1.5px dashed #c8e0cc; font-size: 13px;
-      border-radius: 14px; padding: 12px; cursor: pointer;
-      font-family: inherit; font-weight: 700;
-      transition: all 0.18s;
-    }
-    .btn-add-new:hover { background: #f4faf5; border-color: #7a9e80; transform: translateY(-1px); }
+    select { appearance:none; -webkit-appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c8c0b5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; cursor:pointer; }
+    select:focus, input:focus { border-color:#7a9e80; box-shadow:0 0 0 3px rgba(122,158,128,.12); }
+    input::placeholder { color:#c8c0b5; }
+    .form-btns { display:flex; gap:8px; margin-top:4px; }
+    .btn { border:none; border-radius:10px; padding:10px 20px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; transition:all .18s; }
+    .btn:hover { transform:translateY(-1px); }
+    .btn:active { transform:translateY(0); }
+    .btn-primary { background:#6b8f71; color:#fff; flex:1; box-shadow:0 2px 8px rgba(107,143,113,.25); }
+    .btn-primary:hover { background:#5a7d60; }
+    .btn-secondary { background:#f0ece6; color:#9a9288; }
+    .btn-secondary:hover { background:#e8e4de; }
+    .btn-add { width:100%; background:#fff; color:#7a9e80; border:1.5px dashed #c8e0cc; font-size:13px; border-radius:14px; padding:12px; cursor:pointer; font-family:inherit; font-weight:700; transition:all .18s; }
+    .btn-add:hover { background:#f4faf5; border-color:#7a9e80; transform:translateY(-1px); }
 
-    .footer-note { margin-top: 16px; text-align: center; color: #d0c8be; font-size: 11px; }
+    /* Mode toggle */
+    .mode-toggle { display:flex; background:#f0ece6; border-radius:10px; padding:3px; }
+    .mode-btn { flex:1; border:none; border-radius:8px; padding:8px 6px; font-size:11px; font-weight:700; cursor:pointer; font-family:inherit; background:transparent; color:#9a9288; transition:all .18s; }
+    .mode-btn.active { background:#fff; color:#2a2825; box-shadow:0 1px 4px rgba(0,0,0,.1); }
 
-    /* ── Mode toggle ── */
-    .mode-toggle {
-      display: flex; gap: 0; background: #f0ece6; border-radius: 10px; padding: 3px;
-    }
-    .mode-btn {
-      flex: 1; border: none; border-radius: 8px; padding: 8px 10px;
-      font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;
-      background: transparent; color: #9a9288; transition: all 0.18s;
-    }
-    .mode-btn.active { background: #fff; color: #2a2825; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    /* Calc preview */
+    .calc-preview { margin-top:8px; padding:10px 12px; border-radius:10px; background:#f9f7f4; border:1px solid #e8e4de; font-size:12px; color:#7a7068; line-height:1.8; }
+    .calc-preview:empty { display:none; }
+    .calc-preview b { color:#2a2825; font-weight:700; }
 
-    /* ── Calc preview ── */
-    .calc-preview {
-      margin-top: 8px; padding: 10px 12px; border-radius: 10px;
-      background: #f9f7f4; border: 1px solid #e8e4de;
-      font-size: 12px; color: #7a7068; line-height: 1.7;
-      min-height: 0; transition: all 0.2s;
-    }
-    .calc-preview:empty { display: none; }
-    .calc-preview b { color: #2a2825; font-weight: 700; }
+    /* Backup */
+    .backup-bar { display:flex; gap:8px; margin-top:12px; }
+    .backup-btn { flex:1; background:#fff; border:1px solid #e8e4de; border-radius:12px; padding:11px 10px; font-size:12px; font-weight:700; color:#7a7068; cursor:pointer; font-family:inherit; transition:all .18s; display:flex; align-items:center; justify-content:center; gap:5px; }
+    .backup-btn:hover { background:#f5f3ef; border-color:#d0c8be; color:#2a2825; transform:translateY(-1px); }
 
-    /* ── Backup bar ── */
-    .backup-bar {
-      display: flex; gap: 8px; margin-top: 12px;
-    }
-    .backup-btn {
-      flex: 1; background: #fff; border: 1px solid #e8e4de;
-      border-radius: 12px; padding: 11px 10px;
-      font-size: 12px; font-weight: 700; color: #7a7068;
-      cursor: pointer; font-family: inherit;
-      transition: all 0.18s;
-      display: flex; align-items: center; justify-content: center; gap: 5px;
-    }
-    .backup-btn:hover { background: #f5f3ef; border-color: #d0c8be; color: #2a2825; transform: translateY(-1px); }
-    .backup-btn:active { transform: translateY(0); }
+    /* Toast */
+    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:#2a2825; color:#fff; padding:10px 20px; border-radius:20px; font-size:13px; font-weight:500; box-shadow:0 4px 20px rgba(0,0,0,.15); transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s; opacity:0; pointer-events:none; white-space:nowrap; z-index:999; }
+    .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
 
-    /* ── Toast ── */
-    .toast {
-      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
-      background: #2a2825; color: #fff; padding: 10px 20px;
-      border-radius: 20px; font-size: 13px; font-weight: 500;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
-      opacity: 0; pointer-events: none; white-space: nowrap; z-index: 999;
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    /* Count-up */
+    @keyframes countUp { from{opacity:.4;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+    .count-pop { animation:countUp .35s ease; }
 
-    /* ── Cumulative amount ── */
-    .summary-cumulative {
-      display: flex; align-items: baseline; gap: 6px; margin-bottom: 8px;
-    }
-    .summary-cumulative-label { color: #b5a898; font-size: 11px; }
-    .summary-cumulative-value {
-      font-size: 17px; font-weight: 700; color: #2a2825;
-      font-variant-numeric: tabular-nums;
-    }
-    .summary-cumulative-sub { color: #c8c0b5; font-size: 11px; }
+    .footer-note { margin-top:16px; text-align:center; color:#d0c8be; font-size:11px; }
 
-    .loan-cumulative {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 8px 12px; border-radius: 10px; margin-bottom: 10px;
-    }
-    .loan-cumulative-label { font-size: 11px; color: #9a9288; }
-    .loan-cumulative-right { display: flex; align-items: baseline; gap: 5px; }
-    .loan-cumulative-value {
-      font-size: 16px; font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      transition: color 0.2s;
-    }
-    .loan-cumulative-total { font-size: 11px; color: #c8c0b5; }
-
-    /* count-up animation */
-    @keyframes countUp {
-      from { opacity: 0.4; transform: translateY(4px); }
-      to   { opacity: 1;   transform: translateY(0); }
-    }
-    .count-pop { animation: countUp 0.35s ease; }
+    /* Prepayment modal overlay */
+    .overlay { position:fixed; inset:0; background:rgba(0,0,0,.3); z-index:200; display:flex; align-items:flex-end; justify-content:center; }
+    .overlay.hidden { display:none; }
+    .modal { background:#fff; border-radius:20px 20px 0 0; padding:24px 20px 40px; width:100%; max-width:560px; }
+    .modal-title { font-weight:700; font-size:15px; margin-bottom:16px; }
+    .modal-hint  { font-size:12px; color:#9a9288; margin-bottom:14px; line-height:1.6; }
+    .modal-fields { display:flex; flex-direction:column; gap:10px; }
+    .modal-btns { display:flex; gap:8px; margin-top:14px; }
   </style>
 </head>
 <body>
@@ -244,9 +168,9 @@
       <div class="header-label">Repayment</div>
       <div class="header-title">返済チェックシート</div>
     </div>
-    <div class="year-selector">
+    <div class="year-sel">
       <button class="year-btn" id="prevYear">‹</button>
-      <span class="year-text" id="yearDisplay"></span>
+      <span class="year-txt" id="yearDisplay"></span>
       <button class="year-btn" id="nextYear">›</button>
     </div>
   </div>
@@ -255,24 +179,23 @@
 <main>
   <!-- Summary -->
   <div class="summary-card">
-    <div class="summary-ring">
+    <div class="sum-ring">
       <svg width="76" height="76" class="ring-svg">
         <circle class="ring-bg" cx="38" cy="38" r="32"/>
-        <circle class="ring-fg" id="ringFg" cx="38" cy="38" r="32"
-          stroke="#6b8f71" stroke-dasharray="201.06" stroke-dashoffset="201.06"/>
+        <circle class="ring-fg" id="ringFg" cx="38" cy="38" r="32" stroke="#6b8f71" stroke-dasharray="201.06" stroke-dashoffset="201.06"/>
       </svg>
-      <div class="ring-label" id="ringLabel">0%</div>
+      <div class="ring-lbl" id="ringLbl">0%</div>
     </div>
-    <div class="summary-info">
-      <div class="summary-year">全期間 返済進捗</div>
-      <div class="summary-cumulative">
-        <span class="summary-cumulative-label">累計支払額</span>
-        <span class="summary-cumulative-value" id="summaryTotal">¥0</span>
-        <span class="summary-cumulative-sub" id="summaryTotalSub"></span>
+    <div class="sum-info">
+      <div class="sum-sub">全期間 返済進捗</div>
+      <div class="cum-row">
+        <span class="cum-lbl">累計支払額</span>
+        <span class="cum-val" id="sumTotal">¥0</span>
+        <span class="cum-of"  id="sumTotalOf"></span>
       </div>
-      <div class="summary-amount-label">今月の振込済</div>
-      <span class="summary-amount-value" id="paidThisMonth">¥0</span>
-      <span class="summary-amount-total" id="totalDue"></span>
+      <div class="now-lbl">今月の振込済</div>
+      <span class="now-val" id="nowPaid">¥0</span>
+      <span class="now-of"  id="nowOf"></span>
       <div class="tags" id="tagsArea"></div>
     </div>
   </div>
@@ -280,578 +203,460 @@
   <!-- Loan cards -->
   <div id="loanCards"></div>
 
-  <!-- Add form -->
+  <!-- Loan form -->
   <div id="formPanel" class="form-panel" style="display:none;">
-    <div class="form-panel-title" id="formTitle">ローンを追加</div>
+    <div class="form-title" id="formTitle">ローンを追加</div>
     <div class="form-fields">
       <div>
-        <div class="field-label">ローン名</div>
+        <div class="field-lbl">ローン名</div>
         <input type="text" id="fName" placeholder="例: 奨学金" />
       </div>
       <div>
-        <div class="field-label">月々の返済額（円）</div>
-        <input type="number" id="fAmount" placeholder="例: 12300" />
+        <div class="field-lbl">月々の返済額（円）</div>
+        <input type="number" id="fAmount" placeholder="例: 50000" />
       </div>
       <div>
-        <div class="field-label">返済開始</div>
+        <div class="field-lbl">返済開始</div>
         <div class="field-pair">
-          <select id="fStartYear"></select>
-          <select id="fStartMonth"></select>
+          <select id="fSY"></select><select id="fSM"></select>
         </div>
       </div>
       <div>
-        <div class="field-label">返済終了</div>
+        <div class="field-lbl">返済終了</div>
         <div class="field-pair">
-          <select id="fEndYear"></select>
-          <select id="fEndMonth"></select>
+          <select id="fEY"></select><select id="fEM"></select>
         </div>
       </div>
       <div>
-        <div class="field-label">端数の調整</div>
-        <div class="field-label" style="margin-bottom:8px;color:#c8c0b5;font-size:10px;">月額×月数で割り切れない場合、差額をどこに乗せるか</div>
+        <div class="field-lbl">端数の調整</div>
+        <div class="field-hint">月額×月数と総額が合わない場合、差額をどこに乗せるか</div>
         <div class="mode-toggle">
-          <button class="mode-btn active" id="adjFirst" onclick="setAdj('first')">最初の月に加算</button>
-          <button class="mode-btn" id="adjLast"  onclick="setAdj('last')">最後の月に加算</button>
+          <button class="mode-btn active" id="adjFirst"  onclick="setAdj('first')">最初の月</button>
+          <button class="mode-btn"        id="adjLast"   onclick="setAdj('last')">最後の月</button>
+          <button class="mode-btn"        id="adjExtra"  onclick="setAdj('extra')">1ヶ月追加</button>
         </div>
       </div>
       <div>
-        <div class="field-label">返済総額（参考）</div>
-        <input type="number" id="fTotal" placeholder="例: 1476300（任意）" />
+        <div class="field-lbl">返済総額（任意）</div>
+        <input type="number" id="fTotal" placeholder="例: 316000" />
         <div class="calc-preview" id="calcPreview"></div>
       </div>
       <div class="form-btns">
-        <button class="btn btn-primary" id="fConfirm">保存する</button>
+        <button class="btn btn-primary"   id="fConfirm">保存する</button>
         <button class="btn btn-secondary" id="fCancel">キャンセル</button>
       </div>
     </div>
   </div>
 
-  <button class="btn-add-new" id="showAddBtn">＋ ローンを追加</button>
+  <button class="btn-add" id="showAddBtn">＋ ローンを追加</button>
 
-  <!-- Backup / Restore -->
   <div class="backup-bar">
     <button class="backup-btn" id="exportBtn">⬇ バックアップを保存</button>
     <button class="backup-btn" id="importBtn">⬆ バックアップを読み込む</button>
     <input type="file" id="importFile" accept=".json" style="display:none;" />
   </div>
-
   <p class="footer-note">データはこのブラウザに保存されます</p>
 </main>
 
-<script>
-  const MO = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
-  const CIRC = 2 * Math.PI * 32;
-  const COLORS = ["#7a9e80","#e8a87c","#8fa8d0","#c47f9a","#a07fc4","#d4a852"];
+<!-- Prepayment modal -->
+<div class="overlay hidden" id="prepayOverlay">
+  <div class="modal">
+    <div class="modal-title" id="prepayTitle">繰り上げ返済を記録</div>
+    <div class="modal-hint" id="prepayHint"></div>
+    <div class="modal-fields">
+      <div>
+        <div class="field-lbl">繰り上げ返済した金額（円）</div>
+        <input type="number" id="prepayAmt" placeholder="例: 100000" />
+      </div>
+      <div>
+        <div class="field-lbl">メモ（任意）</div>
+        <input type="text" id="prepayMemo" placeholder="例: ボーナスで追加返済" />
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-primary"   id="prepayConfirm">保存する</button>
+      <button class="btn btn-secondary" id="prepayCancel">キャンセル</button>
+    </div>
+  </div>
+</div>
 
+<script>
+  const MO = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  const CIRC = 2 * Math.PI * 32;
+  const COLORS = ['#7a9e80','#e8a87c','#8fa8d0','#c47f9a','#a07fc4','#d4a852'];
   const now = new Date();
   const TY = now.getFullYear(), TM = now.getMonth() + 1;
 
   let viewYear = TY;
-  let loans = [], payments = {};
-  let editingId = null; // null = add mode, id = edit mode
+  let loans = [], payments = {}, prepayments = {};
+  let editingId = null;
 
   const DEFAULTS = [
-    { id:1, name:"住宅ローン", amount:80000, color:"#7a9e80", startYear:TY, startMonth:1, endYear:TY+35, endMonth:12 },
-    { id:2, name:"カーローン", amount:25000, color:"#e8a87c", startYear:TY, startMonth:1, endYear:TY+5,  endMonth:12 },
-    { id:3, name:"カードローン",amount:15000, color:"#8fa8d0", startYear:TY, startMonth:1, endYear:TY+2,  endMonth:12 },
+    { id:1, name:'住宅ローン',  amount:80000, color:'#7a9e80', startYear:TY, startMonth:1, endYear:TY+35, endMonth:12, adjMode:'last', remainder:0 },
+    { id:2, name:'カーローン',  amount:25000, color:'#e8a87c', startYear:TY, startMonth:1, endYear:TY+5,  endMonth:12, adjMode:'last', remainder:0 },
+    { id:3, name:'カードローン',amount:15000, color:'#8fa8d0', startYear:TY, startMonth:1, endYear:TY+2,  endMonth:12, adjMode:'last', remainder:0 },
   ];
 
-  /* ── Animate value ───────────────────────── */
-  const _prevValues = {};
-  function animateValue(id, newVal) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const formatted = "¥" + newVal.toLocaleString();
-    if (_prevValues[id] !== newVal) {
-      el.classList.remove("count-pop");
-      void el.offsetWidth;
-      el.classList.add("count-pop");
-      _prevValues[id] = newVal;
-    }
-    el.textContent = formatted;
-  }
-
-  /* ── Storage ─────────────────────────────── */
+  /* ── Storage ── */
   function load() {
     try {
-      const l = localStorage.getItem("rt2_loans");
-      const p = localStorage.getItem("rt2_payments");
-      loans    = l ? JSON.parse(l) : JSON.parse(JSON.stringify(DEFAULTS));
-      payments = p ? JSON.parse(p) : {};
-      // migrate: fill missing period fields
-      loans = loans.map(l => ({
-        startYear: TY, startMonth: 1, endYear: TY+10, endMonth: 12, ...l
-      }));
-    } catch(e) {
-      loans = JSON.parse(JSON.stringify(DEFAULTS)); payments = {};
-    }
+      const l = localStorage.getItem('rt3_loans');
+      const p = localStorage.getItem('rt3_payments');
+      const pp= localStorage.getItem('rt3_prepay');
+      loans       = l  ? JSON.parse(l)  : JSON.parse(JSON.stringify(DEFAULTS));
+      payments    = p  ? JSON.parse(p)  : {};
+      prepayments = pp ? JSON.parse(pp) : {};
+      loans = loans.map(l => ({ startYear:TY,startMonth:1,endYear:TY+10,endMonth:12,adjMode:'last',remainder:0,...l }));
+    } catch(e) { loans=JSON.parse(JSON.stringify(DEFAULTS)); payments={}; prepayments={}; }
   }
   function save() {
     try {
-      localStorage.setItem("rt2_loans", JSON.stringify(loans));
-      localStorage.setItem("rt2_payments", JSON.stringify(payments));
+      localStorage.setItem('rt3_loans',    JSON.stringify(loans));
+      localStorage.setItem('rt3_payments', JSON.stringify(payments));
+      localStorage.setItem('rt3_prepay',   JSON.stringify(prepayments));
     } catch(e) {}
   }
 
-  /* ── Helpers ─────────────────────────────── */
-  function pkey(id, y, m) { return `${id}-${y}-${m}`; }
+  /* ── Helpers ── */
+  function pkey(id,y,m) { return `${id}-${y}-${m}`; }
+  function ppkey(id,y,m){ return `pp-${id}-${y}-${m}`; }
 
-  function inRange(loan, y, m) {
-    const ym = y*100+m, s = loan.startYear*100+loan.startMonth, e = loan.endYear*100+loan.endMonth;
-    return ym >= s && ym <= e;
+  function inRange(loan,y,m) {
+    const ym=y*100+m, s=loan.startYear*100+loan.startMonth, e=effectiveEnd(loan)*100+effectiveEndM(loan);
+    return ym>=s && ym<=e;
   }
+
+  // If adjMode='extra', the loan has one more month beyond endYear/endMonth
+  function effectiveEnd(loan)  { return loan.adjMode==='extra' && loan.remainder>0 ? (loan.endMonth===12 ? loan.endYear+1 : loan.endYear)  : loan.endYear; }
+  function effectiveEndM(loan) { return loan.adjMode==='extra' && loan.remainder>0 ? (loan.endMonth===12 ? 1 : loan.endMonth+1) : loan.endMonth; }
+
   function totalMonths(loan) {
-    return (loan.endYear - loan.startYear)*12 + (loan.endMonth - loan.startMonth) + 1;
+    const ey=effectiveEnd(loan), em=effectiveEndM(loan);
+    return (ey-loan.startYear)*12+(em-loan.startMonth)+1;
   }
 
-  // actual yen amount for a given month (handles remainder)
-  function amountForMonth(loan, y, m) {
-    const rem = loan.remainder || 0;
-    if (rem === 0) return loan.amount;
-    const isFirst = y === loan.startYear && m === loan.startMonth;
-    const isLast  = y === loan.endYear   && m === loan.endMonth;
-    const adj     = loan.adjMode === 'last' ? isLast : isFirst;
-    return loan.amount + (adj ? rem : 0);
+  function amountForMonth(loan,y,m) {
+    const rem = loan.remainder||0;
+    if (rem===0) return loan.amount;
+    if (loan.adjMode==='first') {
+      return (y===loan.startYear && m===loan.startMonth) ? loan.amount+rem : loan.amount;
+    }
+    if (loan.adjMode==='last') {
+      return (y===loan.endYear && m===loan.endMonth) ? loan.amount+rem : loan.amount;
+    }
+    if (loan.adjMode==='extra') {
+      const ey=effectiveEnd(loan), em=effectiveEndM(loan);
+      return (y===ey && m===em) ? rem : loan.amount;
+    }
+    return loan.amount;
   }
 
-  function paidAllTime(loan) {
-    let n = 0;
-    for (let y = loan.startYear; y <= loan.endYear; y++)
-      for (let m = 1; m <= 12; m++)
-        if (inRange(loan,y,m) && payments[pkey(loan.id,y,m)]) n++;
+  function paidCountAllTime(loan) {
+    let n=0;
+    for(let y=loan.startYear; y<=effectiveEnd(loan); y++)
+      for(let m=1; m<=12; m++)
+        if(inRange(loan,y,m) && payments[pkey(loan.id,y,m)]) n++;
     return n;
   }
-
-  // total yen paid (respects remainder month)
   function paidYenAllTime(loan) {
-    let total = 0;
-    for (let y = loan.startYear; y <= loan.endYear; y++)
-      for (let m = 1; m <= 12; m++)
-        if (inRange(loan,y,m) && payments[pkey(loan.id,y,m)])
-          total += amountForMonth(loan, y, m);
-    return total;
+    let t=0;
+    for(let y=loan.startYear; y<=effectiveEnd(loan); y++)
+      for(let m=1; m<=12; m++)
+        if(inRange(loan,y,m) && payments[pkey(loan.id,y,m)])
+          t+=amountForMonth(loan,y,m);
+    return t;
   }
-
-  // total yen for whole loan
   function totalYen(loan) {
-    const rem = loan.remainder || 0;
-    return loan.amount * totalMonths(loan) + rem;
+    const rem=loan.remainder||0;
+    if(loan.adjMode==='extra') return loan.amount*(totalMonths(loan)-1)+rem;
+    return loan.amount*totalMonths(loan)+rem;
   }
-
+  function prepayTotal(loan) {
+    let t=0;
+    Object.entries(prepayments).forEach(([k,v])=>{ if(k.startsWith(`pp-${loan.id}-`)) t+=v.amount||0; });
+    return t;
+  }
   function remainingMonths(loan) {
-    const endYM = loan.endYear*100+loan.endMonth, nowYM = TY*100+TM;
-    if (endYM < nowYM) return 0;
-    return (loan.endYear - TY)*12 + (loan.endMonth - TM) + 1;
+    const ey=effectiveEnd(loan),em=effectiveEndM(loan);
+    const endYM=ey*100+em, nowYM=TY*100+TM;
+    if(endYM<nowYM) return 0;
+    return (ey-TY)*12+(em-TM)+1;
   }
-  function isEnded(loan) { return loan.endYear*100+loan.endMonth < TY*100+TM; }
-
-  /* ── Select builders ─────────────────────── */
-  function fillYears(id, val) {
-    const sel = document.getElementById(id);
-    sel.innerHTML = "";
-    for (let y = TY-10; y <= TY+50; y++) {
-      const o = document.createElement("option");
-      o.value = y; o.textContent = y+"年";
-      if (y === val) o.selected = true;
-      sel.appendChild(o);
-    }
-  }
-  function fillMonths(id, val) {
-    const sel = document.getElementById(id);
-    sel.innerHTML = "";
-    MO.forEach((m,i) => {
-      const o = document.createElement("option");
-      o.value = i+1; o.textContent = m;
-      if (i+1 === val) o.selected = true;
-      sel.appendChild(o);
-    });
+  function isEnded(loan) {
+    return effectiveEnd(loan)*100+effectiveEndM(loan) < TY*100+TM;
   }
 
-  /* ── Render ──────────────────────────────── */
+  /* ── Animate ── */
+  const _pv={};
+  function animVal(id,v) {
+    const el=document.getElementById(id); if(!el) return;
+    if(_pv[id]!==v){el.classList.remove('count-pop');void el.offsetWidth;el.classList.add('count-pop');_pv[id]=v;}
+    el.textContent='¥'+v.toLocaleString();
+  }
+
+  /* ── Select builders ── */
+  function fillYears(id,val){ const s=document.getElementById(id); s.innerHTML=''; for(let y=TY-10;y<=TY+50;y++){const o=document.createElement('option');o.value=y;o.textContent=y+'年';if(y===val)o.selected=true;s.appendChild(o);} }
+  function fillMonths(id,val){ const s=document.getElementById(id); s.innerHTML=''; MO.forEach((m,i)=>{const o=document.createElement('option');o.value=i+1;o.textContent=m;if(i+1===val)o.selected=true;s.appendChild(o);}); }
+
+  /* ── Render ── */
   function render() {
-    document.getElementById("yearDisplay").textContent = viewYear;
+    document.getElementById('yearDisplay').textContent=viewYear;
     renderSummary();
     renderCards();
   }
 
   function renderSummary() {
-    const active = loans.filter(l => inRange(l, TY, TM));
-    const totalDue = active.reduce((s,l) => s+l.amount, 0);
-    const paidNow  = active.filter(l => payments[pkey(l.id,TY,TM)]).reduce((s,l) => s+l.amount, 0);
-
-    let totM = 0, totP = 0;
-    loans.forEach(l => { totM += totalMonths(l); totP += paidAllTime(l); });
-    const prog = totM === 0 ? 0 : Math.round(totP/totM*100);
-
-    // cumulative paid amount (all loans, all time)
-    let cumulativePaid = 0, cumulativeTotal = 0;
-    loans.forEach(l => {
-      cumulativePaid += paidYenAllTime(l);
-      cumulativeTotal += totalYen(l);
-    });
-
-    document.getElementById("ringFg").style.strokeDashoffset = CIRC*(1-prog/100);
-    document.getElementById("ringLabel").textContent = prog+"%";
-    animateValue("summaryTotal", cumulativePaid);
-    document.getElementById("summaryTotalSub").textContent = "/ ¥"+cumulativeTotal.toLocaleString();
-    document.getElementById("paidThisMonth").textContent = "¥"+paidNow.toLocaleString();
-    document.getElementById("totalDue").textContent = "今月合計 ¥"+totalDue.toLocaleString()+" /月";
-
-    const area = document.getElementById("tagsArea");
-    area.innerHTML = "";
-    active.forEach(l => {
-      const s = document.createElement("span");
-      s.className = "tag";
-      s.style.cssText = `background:${l.color}18;color:${l.color};border:1px solid ${l.color}30;`;
-      s.textContent = (payments[pkey(l.id,TY,TM)] ? "✓ " : "· ") + l.name;
-      area.appendChild(s);
-    });
+    const active=loans.filter(l=>inRange(l,TY,TM));
+    const totalDue=active.reduce((s,l)=>s+amountForMonth(l,TY,TM),0);
+    const paidNow =active.filter(l=>payments[pkey(l.id,TY,TM)]).reduce((s,l)=>s+amountForMonth(l,TY,TM),0);
+    let totM=0,totP=0,cumPaid=0,cumTotal=0;
+    loans.forEach(l=>{totM+=totalMonths(l);totP+=paidCountAllTime(l);cumPaid+=paidYenAllTime(l)+prepayTotal(l);cumTotal+=totalYen(l);});
+    const prog=totM===0?0:Math.round(totP/totM*100);
+    document.getElementById('ringFg').style.strokeDashoffset=CIRC*(1-prog/100);
+    document.getElementById('ringLbl').textContent=prog+'%';
+    animVal('sumTotal',cumPaid);
+    document.getElementById('sumTotalOf').textContent='/ ¥'+cumTotal.toLocaleString();
+    document.getElementById('nowPaid').textContent='¥'+paidNow.toLocaleString();
+    document.getElementById('nowOf').textContent='今月合計 ¥'+totalDue.toLocaleString()+' /月';
+    const area=document.getElementById('tagsArea'); area.innerHTML='';
+    active.forEach(l=>{const s=document.createElement('span');s.className='tag';s.style.cssText=`background:${l.color}18;color:${l.color};border:1px solid ${l.color}30;`;s.textContent=(payments[pkey(l.id,TY,TM)]?'✓ ':'· ')+l.name;area.appendChild(s);});
   }
 
   function renderCards() {
-    const wrap = document.getElementById("loanCards");
-    wrap.innerHTML = "";
-    loans.forEach(loan => renderOneCard(loan, wrap));
+    const wrap=document.getElementById('loanCards'); wrap.innerHTML='';
+    loans.forEach(l=>renderOneCard(l,wrap));
   }
 
-  function renderOneCard(loan, wrap) {
-    const totP = paidAllTime(loan);
-    const totM = totalMonths(loan);
-    // year-view progress
-    const viewPaid = MO.filter((_,i) => inRange(loan,viewYear,i+1) && payments[pkey(loan.id,viewYear,i+1)]).length;
-    const viewTotal = MO.filter((_,i) => inRange(loan,viewYear,i+1)).length;
-    const pct = viewTotal === 0 ? 0 : Math.round(viewPaid/viewTotal*100);
-    const remMonths = remainingMonths(loan);
-    const ended = isEnded(loan);
+  function renderOneCard(loan,wrap) {
+    const totP=paidCountAllTime(loan), totM=totalMonths(loan);
+    const viewPaid =MO.filter((_,i)=>inRange(loan,viewYear,i+1)&&payments[pkey(loan.id,viewYear,i+1)]).length;
+    const viewTotal=MO.filter((_,i)=>inRange(loan,viewYear,i+1)).length;
+    const pct=viewTotal===0?0:Math.round(viewPaid/viewTotal*100);
+    const remM=remainingMonths(loan), ended=isEnded(loan);
 
-    const card = document.createElement("div");
-    card.className = "loan-card";
+    const card=document.createElement('div'); card.className='loan-card';
 
     /* header */
-    const hdr = document.createElement("div");
-    hdr.className = "loan-header";
-
-    const left = document.createElement("div");
-    const nr = document.createElement("div");
-    nr.className = "loan-name-row";
-    const dot = document.createElement("div");
-    dot.className = "loan-dot"; dot.style.background = loan.color;
-    const info = document.createElement("div");
-    info.innerHTML = `<div class="loan-name">${loan.name}</div>
-      <div class="loan-amount"><span class="loan-amount-value" style="color:${loan.color}">¥${loan.amount.toLocaleString()}</span> /月</div>`;
-    nr.append(dot, info); left.appendChild(nr);
-
-    const right = document.createElement("div");
-    right.className = "loan-meta";
-
-    const countEl = document.createElement("span");
-    countEl.className = "loan-count"; countEl.id = `cnt-${loan.id}`;
-    countEl.textContent = `${totP}/${totM}ヶ月`;
-
-    /* edit button */
-    const editBtn = document.createElement("button");
-    editBtn.className = "loan-remove";
-    editBtn.style.color = "#c8c0b5"; editBtn.style.fontSize = "14px";
-    editBtn.textContent = "✎";
-    editBtn.title = "編集";
-    editBtn.onclick = () => openEdit(loan);
-
-    const delBtn = document.createElement("button");
-    delBtn.className = "loan-remove";
-    delBtn.textContent = "×";
-    delBtn.onclick = () => { loans = loans.filter(l => l.id !== loan.id); save(); render(); };
-
-    right.append(countEl, editBtn, delBtn);
-    hdr.append(left, right);
-    card.appendChild(hdr);
+    const hdr=document.createElement('div'); hdr.className='loan-hdr';
+    const left=document.createElement('div');
+    const nr=document.createElement('div'); nr.className='loan-name-row';
+    const dot=document.createElement('div'); dot.className='loan-dot'; dot.style.background=loan.color;
+    const info=document.createElement('div');
+    info.innerHTML=`<div class="loan-name">${loan.name}</div><div class="loan-amt"><span class="loan-amt-val" style="color:${loan.color}">¥${loan.amount.toLocaleString()}</span> /月</div>`;
+    nr.append(dot,info); left.appendChild(nr);
+    const right=document.createElement('div'); right.className='loan-meta';
+    const cnt=document.createElement('span'); cnt.className='loan-cnt'; cnt.id=`cnt-${loan.id}`; cnt.textContent=`${totP}/${totM}ヶ月`;
+    const editBtn=document.createElement('button'); editBtn.className='icon-btn'; editBtn.textContent='✎'; editBtn.title='編集'; editBtn.onclick=()=>openEdit(loan);
+    const delBtn=document.createElement('button');  delBtn.className='icon-btn del'; delBtn.textContent='×'; delBtn.onclick=()=>{loans=loans.filter(l=>l.id!==loan.id);save();render();};
+    right.append(cnt,editBtn,delBtn); hdr.append(left,right); card.appendChild(hdr);
 
     /* period row */
-    const pr = document.createElement("div");
-    pr.className = "period-row";
-    const pt = document.createElement("span");
-    pt.className = "period-text";
-    pt.textContent = `${loan.startYear}年${loan.startMonth}月 〜 ${loan.endYear}年${loan.endMonth}月`;
-    pr.appendChild(pt);
-    if (ended) {
-      const b = document.createElement("span");
-      b.className = "period-badge";
-      b.style.cssText = "background:#f0ece6;color:#b5a898;";
-      b.textContent = "返済完了"; pr.appendChild(b);
-    } else {
-      const b = document.createElement("span");
-      b.className = "period-badge";
-      b.style.cssText = `background:${loan.color}18;color:${loan.color};`;
-      b.textContent = `残 ${remMonths}ヶ月`; pr.appendChild(b);
-    }
-    card.appendChild(pr);
+    const pr=document.createElement('div'); pr.className='period-row';
+    const pt=document.createElement('span'); pt.className='period-txt';
+    const ey=effectiveEnd(loan),em=effectiveEndM(loan);
+    pt.textContent=`${loan.startYear}年${loan.startMonth}月 〜 ${ey}年${em}月`;
+    if(loan.adjMode==='extra'&&loan.remainder>0){const note=document.createElement('span');note.style.cssText='font-size:10px;color:#e8a87c;';note.textContent=`（最終月 ¥${loan.remainder.toLocaleString()}）`;pr.append(pt,note);}else{pr.appendChild(pt);}
+    const badge=document.createElement('span'); badge.className='period-badge';
+    if(ended){badge.style.cssText='background:#f0ece6;color:#b5a898;';badge.textContent='返済完了';}
+    else{badge.style.cssText=`background:${loan.color}18;color:${loan.color};`;badge.textContent=`残 ${remM}ヶ月`;}
+    pr.appendChild(badge); card.appendChild(pr);
 
-    /* cumulative paid for this loan */
-    const loanPaid  = paidYenAllTime(loan);
-    const loanTotal = totalYen(loan);
-    const remYen = loan.remainder || 0;
-    const remNote = remYen > 0
-      ? `<span style="font-size:10px;color:#c8c0b5;margin-left:4px;">（端数¥${remYen.toLocaleString()}含む）</span>`
-      : '';
-    const lc = document.createElement('div');
-    lc.className = 'loan-cumulative';
-    lc.style.background = loan.color + '10';
-    lc.innerHTML = `
-      <span class="loan-cumulative-label">累計支払額</span>
-      <div class="loan-cumulative-right">
-        <span class="loan-cumulative-value" id="lcv-${loan.id}" style="color:${loan.color}">¥${loanPaid.toLocaleString()}</span>
-        <span class="loan-cumulative-total">/ ¥${loanTotal.toLocaleString()}${remNote}</span>
-      </div>`;
+    /* cumulative row */
+    const loanPaid=paidYenAllTime(loan), loanTotal=totalYen(loan);
+    const ppTotal=prepayTotal(loan);
+    const lc=document.createElement('div'); lc.className='loan-cum'; lc.style.background=loan.color+'10';
+    const ppNote=ppTotal>0?` <span style="font-size:10px;color:#6b8f71;">（繰上 +¥${ppTotal.toLocaleString()}）</span>`:'';
+    lc.innerHTML=`<span class="loan-cum-lbl">累計支払額</span><div class="loan-cum-right"><span class="loan-cum-val" id="lcv-${loan.id}" style="color:${loan.color}">¥${(loanPaid+ppTotal).toLocaleString()}</span><span class="loan-cum-of">/ ¥${loanTotal.toLocaleString()}${ppNote}</span></div>`;
     card.appendChild(lc);
-    const grid = document.createElement("div");
-    grid.className = "month-grid";
-    MO.forEach((m, i) => {
-      const month = i+1;
-      const ok = inRange(loan, viewYear, month);
-      const isNow = viewYear === TY && month === TM;
 
-      const cell = document.createElement("div");
-      cell.className = "month-cell";
+    /* prepayment row */
+    const pp=document.createElement('div'); pp.className='prepay-row';
+    const ppTxt=ppTotal>0?`¥${ppTotal.toLocaleString()} 繰り上げ済み`:'繰り上げ返済なし';
+    pp.innerHTML=`<span class="prepay-lbl">繰り上げ返済</span><div class="prepay-right"><span class="prepay-val" id="ppv-${loan.id}">${ppTxt}</span><button class="prepay-edit-btn" onclick="openPrepay(${loan.id})">記録する</button></div>`;
+    card.appendChild(pp);
 
-      const lbl = document.createElement("div");
-      lbl.className = "month-label" + (ok ? "" : " out");
-      lbl.textContent = m;
-      if (ok && isNow) lbl.style.color = loan.color;
-
-      const btn = document.createElement("button");
-      btn.className = "check-btn";
-      btn.id = `btn-${loan.id}-${month}`;
-      if (!ok) {
-        btn.disabled = true;
-      } else {
-        styleBtn(btn, loan, month, isNow);
-        const yen = amountForMonth(loan, viewYear, month);
-        btn.title = `¥${yen.toLocaleString()}`;
-        btn.onclick = () => toggle(loan, month, isNow);
-      }
-      cell.append(lbl, btn);
-      grid.appendChild(cell);
+    /* month grid */
+    const grid=document.createElement('div'); grid.className='month-grid';
+    // build all months including potential extra month
+    const allMonths=[];
+    for(let y=loan.startYear;y<=ey;y++) for(let m=1;m<=12;m++) if(inRange(loan,y,m)) allMonths.push({y,m});
+    // show only viewYear months
+    MO.forEach((_,i)=>{
+      const month=i+1;
+      const ok=inRange(loan,viewYear,month);
+      const isNow=viewYear===TY&&month===TM;
+      const cell=document.createElement('div'); cell.className='month-cell';
+      const lbl=document.createElement('div'); lbl.className='month-lbl'+(ok?'':' out'); lbl.textContent=MO[i];
+      if(ok&&isNow) lbl.style.color=loan.color;
+      const btn=document.createElement('button'); btn.className='check-btn'; btn.id=`btn-${loan.id}-${month}`;
+      if(!ok){btn.disabled=true;}
+      else{styleBtn(btn,loan,month,isNow);btn.title=`¥${amountForMonth(loan,viewYear,month).toLocaleString()}`;btn.onclick=()=>toggle(loan,month,isNow);}
+      cell.append(lbl,btn); grid.appendChild(cell);
     });
     card.appendChild(grid);
 
     /* progress */
-    const bg = document.createElement("div"); bg.className = "progress-bg";
-    const fill = document.createElement("div"); fill.className = "progress-fill";
-    fill.id = `prg-${loan.id}`;
-    fill.style.cssText = `width:${pct}%;background:${loan.color};`;
+    const bg=document.createElement('div'); bg.className='progress-bg';
+    const fill=document.createElement('div'); fill.className='progress-fill'; fill.id=`prg-${loan.id}`;
+    fill.style.cssText=`width:${pct}%;background:${loan.color};`;
     bg.appendChild(fill); card.appendChild(bg);
-
     wrap.appendChild(card);
   }
 
-  function styleBtn(btn, loan, month, isNow) {
-    const paid = !!payments[pkey(loan.id, viewYear, month)];
-    btn.textContent = paid ? "✓" : "";
-    btn.style.borderColor = paid ? loan.color : (isNow ? loan.color+"55" : "#e8e4de");
-    btn.style.background  = paid ? loan.color+"18" : (isNow ? loan.color+"08" : "#faf9f7");
-    btn.style.color       = paid ? loan.color : "#e0dbd3";
+  function styleBtn(btn,loan,month,isNow) {
+    const paid=!!payments[pkey(loan.id,viewYear,month)];
+    btn.textContent=paid?'✓':'';
+    btn.style.borderColor=paid?loan.color:(isNow?loan.color+'55':'#e8e4de');
+    btn.style.background =paid?loan.color+'18':(isNow?loan.color+'08':'#faf9f7');
+    btn.style.color      =paid?loan.color:'#e0dbd3';
   }
 
-  function toggle(loan, month, isNow) {
-    const k = pkey(loan.id, viewYear, month);
-    payments[k] = !payments[k];
-    save();
-    const btn = document.getElementById(`btn-${loan.id}-${month}`);
-    if (btn) {
-      btn.classList.remove("pop"); void btn.offsetWidth; btn.classList.add("pop");
-      styleBtn(btn, loan, month, isNow);
-      btn.addEventListener("animationend", () => btn.classList.remove("pop"), { once: true });
-    }
-    // update counter
-    const totP = paidAllTime(loan), totM = totalMonths(loan);
-    const c = document.getElementById(`cnt-${loan.id}`);
-    if (c) c.textContent = `${totP}/${totM}ヶ月`;
-    // update loan cumulative
-    const lcv = document.getElementById(`lcv-${loan.id}`);
-    if (lcv) animateValue(`lcv-${loan.id}`, paidYenAllTime(loan));
-    // update bar
-    const viewPaid = MO.filter((_,i) => inRange(loan,viewYear,i+1) && payments[pkey(loan.id,viewYear,i+1)]).length;
-    const viewTotal = MO.filter((_,i) => inRange(loan,viewYear,i+1)).length;
-    const pct = viewTotal === 0 ? 0 : Math.round(viewPaid/viewTotal*100);
-    const f = document.getElementById(`prg-${loan.id}`);
-    if (f) f.style.width = pct+"%";
+  function toggle(loan,month,isNow) {
+    const k=pkey(loan.id,viewYear,month);
+    payments[k]=!payments[k]; save();
+    const btn=document.getElementById(`btn-${loan.id}-${month}`);
+    if(btn){btn.classList.remove('pop');void btn.offsetWidth;btn.classList.add('pop');styleBtn(btn,loan,month,isNow);btn.addEventListener('animationend',()=>btn.classList.remove('pop'),{once:true});}
+    const totP=paidCountAllTime(loan),totM=totalMonths(loan);
+    const c=document.getElementById(`cnt-${loan.id}`); if(c) c.textContent=`${totP}/${totM}ヶ月`;
+    const lcv=document.getElementById(`lcv-${loan.id}`); if(lcv) animVal(`lcv-${loan.id}`,paidYenAllTime(loan)+prepayTotal(loan));
+    const viewPaid=MO.filter((_,i)=>inRange(loan,viewYear,i+1)&&payments[pkey(loan.id,viewYear,i+1)]).length;
+    const viewTotal=MO.filter((_,i)=>inRange(loan,viewYear,i+1)).length;
+    const pct=viewTotal===0?0:Math.round(viewPaid/viewTotal*100);
+    const f=document.getElementById(`prg-${loan.id}`); if(f) f.style.width=pct+'%';
     renderSummary();
   }
 
-  /* ── Form state ─────────────────────────── */
-  let adjMode = 'first'; // 'first' | 'last'
-
-  function setAdj(a) {
-    adjMode = a;
-    document.getElementById('adjFirst').classList.toggle('active', a === 'first');
-    document.getElementById('adjLast').classList.toggle('active',  a === 'last');
+  /* ── Form ── */
+  let adjMode='last';
+  function setAdj(a){
+    adjMode=a;
+    ['adjFirst','adjLast','adjExtra'].forEach(id=>document.getElementById(id).classList.toggle('active',id==='adj'+a.charAt(0).toUpperCase()+a.slice(1)));
     updatePreview();
   }
-
-  function getFormMonths() {
-    const sy = Number(document.getElementById('fStartYear').value);
-    const sm = Number(document.getElementById('fStartMonth').value);
-    const ey = Number(document.getElementById('fEndYear').value);
-    const em = Number(document.getElementById('fEndMonth').value);
-    if (!sy || !sm || !ey || !em) return 0;
-    return (ey - sy) * 12 + (em - sm) + 1;
+  function getFormMonths(){
+    const sy=+document.getElementById('fSY').value,sm=+document.getElementById('fSM').value;
+    const ey=+document.getElementById('fEY').value,em=+document.getElementById('fEM').value;
+    if(!sy||!sm||!ey||!em) return 0;
+    return (ey-sy)*12+(em-sm)+1;
   }
-
-  function updatePreview() {
-    const el     = document.getElementById('calcPreview');
-    const amount = Number(document.getElementById('fAmount').value);
-    const total  = Number(document.getElementById('fTotal').value);
-    const months = getFormMonths();
-    if (!el) return;
-
-    if (!amount || months <= 0) { el.innerHTML = ''; return; }
-
-    const calcTotal = amount * months;
-    const adjLabel  = adjMode === 'first' ? '最初の月' : '最後の月';
-
-    if (total && total !== calcTotal) {
-      // user entered a total — show remainder
-      const rem = total - calcTotal;
-      if (rem > 0) {
-        el.innerHTML = `月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = <b>¥${calcTotal.toLocaleString()}</b><br>`
-          + `総額との差額 <b style="color:#e8a87c">¥${rem.toLocaleString()}</b> → ${adjLabel}に加算<br>`
-          + `実際の総額: <b>¥${total.toLocaleString()}</b>`;
-      } else {
-        el.innerHTML = `月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = <b>¥${calcTotal.toLocaleString()}</b>`;
-      }
-    } else {
-      el.innerHTML = `月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = 総額 <b>¥${calcTotal.toLocaleString()}</b>`;
-    }
+  function updatePreview(){
+    const el=document.getElementById('calcPreview');
+    const amount=+document.getElementById('fAmount').value;
+    const total=+document.getElementById('fTotal').value;
+    const months=getFormMonths();
+    if(!el) return;
+    if(!amount||months<=0){el.innerHTML='';return;}
+    const calcTotal=amount*months;
+    if(!total||total===calcTotal){el.innerHTML=`月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = 総額 <b>¥${calcTotal.toLocaleString()}</b>`;return;}
+    const rem=total-calcTotal;
+    if(rem<=0){el.innerHTML=`月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = <b>¥${calcTotal.toLocaleString()}</b>`;return;}
+    const labels={'first':'最初の月に加算','last':'最後の月に加算','extra':`1ヶ月追加（¥${rem.toLocaleString()}のみ）`};
+    el.innerHTML=`月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = <b>¥${calcTotal.toLocaleString()}</b><br>端数 <b style="color:#e8a87c">¥${rem.toLocaleString()}</b> → ${labels[adjMode]}<br>実際の総額: <b>¥${total.toLocaleString()}</b>`;
   }
+  ['fAmount','fTotal','fSY','fSM','fEY','fEM'].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener('input',updatePreview);el.addEventListener('change',updatePreview);}});
 
-  ['fAmount','fTotal','fStartYear','fStartMonth','fEndYear','fEndMonth'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.addEventListener('input', updatePreview); el.addEventListener('change', updatePreview); }
-  });
-
-  /* ── Form (add / edit) ───────────────────── */
-  function openAdd() {
-    editingId = null;
-    document.getElementById('formTitle').textContent = 'ローンを追加';
-    document.getElementById('fConfirm').textContent  = '追加する';
-    document.getElementById('fName').value   = '';
-    document.getElementById('fAmount').value = '';
-    document.getElementById('fTotal').value  = '';
-    document.getElementById('calcPreview').innerHTML = '';
-    fillYears('fStartYear', TY); fillMonths('fStartMonth', TM);
-    fillYears('fEndYear', TY+5); fillMonths('fEndMonth', TM === 1 ? 12 : TM-1);
-    setAdj('first');
-    showForm();
+  function openAdd(){
+    editingId=null;
+    document.getElementById('formTitle').textContent='ローンを追加';
+    document.getElementById('fConfirm').textContent='追加する';
+    document.getElementById('fName').value=''; document.getElementById('fAmount').value=''; document.getElementById('fTotal').value='';
+    document.getElementById('calcPreview').innerHTML='';
+    fillYears('fSY',TY);fillMonths('fSM',TM);fillYears('fEY',TY+5);fillMonths('fEM',TM===1?12:TM-1);
+    setAdj('last'); showForm();
   }
-
-  function openEdit(loan) {
-    editingId = loan.id;
-    document.getElementById('formTitle').textContent = '返済を編集';
-    document.getElementById('fConfirm').textContent  = '保存する';
-    document.getElementById('fName').value   = loan.name;
-    document.getElementById('fAmount').value = loan.amount;
-    document.getElementById('fTotal').value  = loan.remainder ? (loan.amount * totalMonths(loan) + loan.remainder) : '';
-    fillYears('fStartYear', loan.startYear); fillMonths('fStartMonth', loan.startMonth);
-    fillYears('fEndYear',   loan.endYear);   fillMonths('fEndMonth',   loan.endMonth);
-    setAdj(loan.adjMode || 'first');
-    updatePreview();
-    showForm();
+  function openEdit(loan){
+    editingId=loan.id;
+    document.getElementById('formTitle').textContent='返済を編集';
+    document.getElementById('fConfirm').textContent='保存する';
+    document.getElementById('fName').value=loan.name; document.getElementById('fAmount').value=loan.amount;
+    document.getElementById('fTotal').value=loan.remainder?(loan.adjMode==='extra'?loan.amount*(totalMonths(loan)-1)+loan.remainder:loan.amount*totalMonths(loan)+loan.remainder):'';
+    fillYears('fSY',loan.startYear);fillMonths('fSM',loan.startMonth);
+    fillYears('fEY',loan.endYear);fillMonths('fEM',loan.endMonth);
+    setAdj(loan.adjMode||'last'); updatePreview(); showForm();
   }
+  function showForm(){document.getElementById('formPanel').style.display='block';document.getElementById('showAddBtn').style.display='none';document.getElementById('fName').focus();}
+  function closeForm(){document.getElementById('formPanel').style.display='none';document.getElementById('showAddBtn').style.display='block';editingId=null;}
 
-  function showForm() {
-    document.getElementById('formPanel').style.display  = 'block';
-    document.getElementById('showAddBtn').style.display = 'none';
-    document.getElementById('fName').focus();
-  }
-  function closeForm() {
-    document.getElementById('formPanel').style.display  = 'none';
-    document.getElementById('showAddBtn').style.display = 'block';
-    editingId = null;
-  }
-
-  document.getElementById('showAddBtn').onclick = openAdd;
-  document.getElementById('fCancel').onclick    = closeForm;
-  document.getElementById('fConfirm').onclick   = () => {
-    const name   = document.getElementById('fName').value.trim();
-    const amount = Number(document.getElementById('fAmount').value);
-    const total  = Number(document.getElementById('fTotal').value);
-    const sy = Number(document.getElementById('fStartYear').value);
-    const sm = Number(document.getElementById('fStartMonth').value);
-    const ey = Number(document.getElementById('fEndYear').value);
-    const em = Number(document.getElementById('fEndMonth').value);
-    if (!name)   { alert('ローン名を入力してください'); return; }
-    if (!amount) { alert('月々の返済額を入力してください'); return; }
-    if (ey*100+em < sy*100+sm) { alert('終了は開始より後の月を設定してください'); return; }
-
-    const months    = (ey - sy) * 12 + (em - sm) + 1;
-    const remainder = total > 0 ? Math.max(0, total - amount * months) : 0;
-
-    const loanData = { name, amount, remainder, adjMode, startYear: sy, startMonth: sm, endYear: ey, endMonth: em };
-    if (editingId === null) {
-      loans.push({ id: Date.now(), color: COLORS[loans.length % COLORS.length], ...loanData });
-    } else {
-      loans = loans.map(l => l.id === editingId ? { ...l, ...loanData } : l);
-    }
-    save(); render(); closeForm();
+  document.getElementById('showAddBtn').onclick=openAdd;
+  document.getElementById('fCancel').onclick=closeForm;
+  document.getElementById('fConfirm').onclick=()=>{
+    const name=document.getElementById('fName').value.trim();
+    const amount=+document.getElementById('fAmount').value;
+    const total=+document.getElementById('fTotal').value;
+    const sy=+document.getElementById('fSY').value,sm=+document.getElementById('fSM').value;
+    const ey=+document.getElementById('fEY').value,em=+document.getElementById('fEM').value;
+    if(!name){alert('ローン名を入力してください');return;}
+    if(!amount){alert('月々の返済額を入力してください');return;}
+    if(ey*100+em<sy*100+sm){alert('終了は開始より後の月を設定してください');return;}
+    const months=(ey-sy)*12+(em-sm)+1;
+    const remainder=total>0?Math.max(0,total-amount*months):0;
+    const loanData={name,amount,remainder,adjMode,startYear:sy,startMonth:sm,endYear:ey,endMonth:em};
+    if(editingId===null) loans.push({id:Date.now(),color:COLORS[loans.length%COLORS.length],...loanData});
+    else loans=loans.map(l=>l.id===editingId?{...l,...loanData}:l);
+    save();render();closeForm();
   };
 
-  /* ── Year nav ────────────────────────────── */
-  document.getElementById("prevYear").onclick = () => { viewYear--; render(); };
-  document.getElementById("nextYear").onclick = () => { viewYear++; render(); };
+  /* ── Prepayment modal ── */
+  let prepayLoanId=null;
+  function openPrepay(loanId){
+    prepayLoanId=loanId;
+    const loan=loans.find(l=>l.id===loanId);
+    document.getElementById('prepayTitle').textContent=`${loan.name} – 繰り上げ返済を記録`;
+    const pp=prepayTotal(loan);
+    document.getElementById('prepayHint').textContent=pp>0?`これまでの繰り上げ返済累計: ¥${pp.toLocaleString()}`:'まだ繰り上げ返済の記録はありません。';
+    document.getElementById('prepayAmt').value=''; document.getElementById('prepayMemo').value='';
+    document.getElementById('prepayOverlay').classList.remove('hidden');
+    document.getElementById('prepayAmt').focus();
+  }
+  function closePrepay(){document.getElementById('prepayOverlay').classList.add('hidden');prepayLoanId=null;}
+  document.getElementById('prepayCancel').onclick=closePrepay;
+  document.getElementById('prepayOverlay').onclick=(e)=>{if(e.target===e.currentTarget)closePrepay();};
+  document.getElementById('prepayConfirm').onclick=()=>{
+    const amt=+document.getElementById('prepayAmt').value;
+    const memo=document.getElementById('prepayMemo').value.trim();
+    if(!amt||amt<=0){alert('金額を入力してください');return;}
+    // store with timestamp key so multiple entries accumulate
+    const k=ppkey(prepayLoanId,TY,TM)+'_'+Date.now();
+    prepayments[k]={amount:amt,memo,date:`${TY}-${String(TM).padStart(2,'0')}`};
+    save();
+    const loan=loans.find(l=>l.id===prepayLoanId);
+    const ppv=document.getElementById(`ppv-${prepayLoanId}`);
+    if(ppv){const t=prepayTotal(loan);ppv.textContent=`¥${t.toLocaleString()} 繰り上げ済み`;}
+    const lcv=document.getElementById(`lcv-${prepayLoanId}`);
+    if(lcv) animVal(`lcv-${prepayLoanId}`,paidYenAllTime(loan)+prepayTotal(loan));
+    renderSummary();
+    showToast(`✓ 繰り上げ返済 ¥${amt.toLocaleString()} を記録しました`);
+    closePrepay();
+  };
 
-  /* ── Init ────────────────────────────────── */
+  /* ── Year nav ── */
+  document.getElementById('prevYear').onclick=()=>{viewYear--;render();};
+  document.getElementById('nextYear').onclick=()=>{viewYear++;render();};
+
+  /* ── Init ── */
   load(); render();
 
-  /* ── Backup / Restore ────────────────────── */
-  function showToast(msg, duration = 2200) {
-    let t = document.getElementById("toast");
-    if (!t) { t = document.createElement("div"); t.id = "toast"; t.className = "toast"; document.body.appendChild(t); }
-    t.textContent = msg;
-    t.classList.add("show");
-    clearTimeout(t._timer);
-    t._timer = setTimeout(() => t.classList.remove("show"), duration);
-  }
-
-  document.getElementById("exportBtn").onclick = () => {
-    const data = {
-      version: 1,
-      exportedAt: new Date().toISOString(),
-      loans,
-      payments
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    const dateStr = new Date().toISOString().slice(0,10).replace(/-/g,"");
-    a.href = url; a.download = `repayment-backup-${dateStr}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast("✓ バックアップを保存しました");
+  /* ── Backup ── */
+  function showToast(msg,d=2200){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.className='toast';document.body.appendChild(t);}t.textContent=msg;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),d);}
+  document.getElementById('exportBtn').onclick=()=>{
+    const blob=new Blob([JSON.stringify({version:2,exportedAt:new Date().toISOString(),loans,payments,prepayments},null,2)],{type:'application/json'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`repayment-backup-${new Date().toISOString().slice(0,10).replace(/-/g,'')}.json`;a.click();
+    showToast('✓ バックアップを保存しました');
   };
-
-  document.getElementById("importBtn").onclick = () => {
-    document.getElementById("importFile").click();
-  };
-
-  document.getElementById("importFile").onchange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      try {
-        const data = JSON.parse(ev.target.result);
-        if (!data.loans || !data.payments) throw new Error("invalid");
-        if (!confirm(`バックアップを読み込みます。\n現在のデータは上書きされます。\n\nよろしいですか？`)) return;
-        loans = data.loans.map(l => ({
-          startYear: TY, startMonth: 1, endYear: TY+10, endMonth: 12, ...l
-        }));
-        payments = data.payments;
-        save();
-        render();
-        showToast("✓ バックアップを読み込みました");
-      } catch(err) {
-        showToast("⚠ ファイルが正しくありません");
-      }
-      e.target.value = "";
+  document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
+  document.getElementById('importFile').onchange=(e)=>{
+    const file=e.target.files[0]; if(!file) return;
+    const reader=new FileReader();
+    reader.onload=(ev)=>{
+      try{
+        const d=JSON.parse(ev.target.result);
+        if(!d.loans||!d.payments) throw new Error('invalid');
+        if(!confirm('バックアップを読み込みます。\n現在のデータは上書きされます。\n\nよろしいですか？')) return;
+        loans=d.loans.map(l=>({startYear:TY,startMonth:1,endYear:TY+10,endMonth:12,adjMode:'last',remainder:0,...l}));
+        payments=d.payments; prepayments=d.prepayments||{};
+        save();render();showToast('✓ バックアップを読み込みました');
+      }catch(err){showToast('⚠ ファイルが正しくありません');}
+      e.target.value='';
     };
     reader.readAsText(file);
   };
