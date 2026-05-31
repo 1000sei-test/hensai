@@ -230,10 +230,11 @@
       <div>
         <div class="field-lbl">端数の調整</div>
         <div class="field-hint">月額×月数と総額が合わない場合、差額をどこに乗せるか</div>
-        <div class="mode-toggle">
-          <button class="mode-btn active" id="adjFirst"  onclick="setAdj('first')">最初の月</button>
-          <button class="mode-btn"        id="adjLast"   onclick="setAdj('last')">最後の月</button>
-          <button class="mode-btn"        id="adjExtra"  onclick="setAdj('extra')">1ヶ月追加</button>
+        <div class="mode-toggle" style="flex-wrap:wrap;gap:3px;">
+          <button class="mode-btn active" id="adjFirst"       onclick="setAdj('first')">最初の月に加算</button>
+          <button class="mode-btn"        id="adjLast"        onclick="setAdj('last')">最後の月に加算</button>
+          <button class="mode-btn"        id="adjExtraFirst"  onclick="setAdj('extraFirst')">1ヶ月追加（最初）</button>
+          <button class="mode-btn"        id="adjExtra"       onclick="setAdj('extra')">1ヶ月追加（最後）</button>
         </div>
       </div>
       <div>
@@ -322,31 +323,54 @@
   function ppkey(id,y,m){ return `pp-${id}-${y}-${m}`; }
 
   function inRange(loan,y,m) {
-    const ym=y*100+m, s=loan.startYear*100+loan.startMonth, e=effectiveEnd(loan)*100+effectiveEndM(loan);
+    const ym=y*100+m;
+    const s=effectiveStart(loan)*100+effectiveStartM(loan);
+    const e=effectiveEnd(loan)*100+effectiveEndM(loan);
     return ym>=s && ym<=e;
   }
 
-  // If adjMode='extra', the loan has one more month beyond endYear/endMonth
-  function effectiveEnd(loan)  { return loan.adjMode==='extra' && loan.remainder>0 ? (loan.endMonth===12 ? loan.endYear+1 : loan.endYear)  : loan.endYear; }
-  function effectiveEndM(loan) { return loan.adjMode==='extra' && loan.remainder>0 ? (loan.endMonth===12 ? 1 : loan.endMonth+1) : loan.endMonth; }
+  // If adjMode='extra'/'extraFirst', the loan has one more month
+  function effectiveEnd(loan) {
+    if((loan.adjMode==='extra'||loan.adjMode==='extraFirst') && loan.remainder>0)
+      return loan.endMonth===12 ? loan.endYear+1 : loan.endYear;
+    return loan.endYear;
+  }
+  function effectiveEndM(loan) {
+    if((loan.adjMode==='extra'||loan.adjMode==='extraFirst') && loan.remainder>0)
+      return loan.endMonth===12 ? 1 : loan.endMonth+1;
+    return loan.endMonth;
+  }
+  function effectiveStart(loan) {
+    if(loan.adjMode==='extraFirst' && loan.remainder>0)
+      return loan.startMonth===1 ? loan.startYear-1 : loan.startYear;
+    return loan.startYear;
+  }
+  function effectiveStartM(loan) {
+    if(loan.adjMode==='extraFirst' && loan.remainder>0)
+      return loan.startMonth===1 ? 12 : loan.startMonth-1;
+    return loan.startMonth;
+  }
 
   function totalMonths(loan) {
-    const ey=effectiveEnd(loan), em=effectiveEndM(loan);
-    return (ey-loan.startYear)*12+(em-loan.startMonth)+1;
+    const sy=effectiveStart(loan),sm=effectiveStartM(loan);
+    const ey=effectiveEnd(loan),em=effectiveEndM(loan);
+    return (ey-sy)*12+(em-sm)+1;
   }
 
   function amountForMonth(loan,y,m) {
-    const rem = loan.remainder||0;
-    if (rem===0) return loan.amount;
-    if (loan.adjMode==='first') {
-      return (y===loan.startYear && m===loan.startMonth) ? loan.amount+rem : loan.amount;
+    const rem=loan.remainder||0;
+    if(rem===0) return loan.amount;
+    if(loan.adjMode==='first')
+      return (y===loan.startYear&&m===loan.startMonth)?loan.amount+rem:loan.amount;
+    if(loan.adjMode==='last')
+      return (y===loan.endYear&&m===loan.endMonth)?loan.amount+rem:loan.amount;
+    if(loan.adjMode==='extra') {
+      const ey=effectiveEnd(loan),em=effectiveEndM(loan);
+      return (y===ey&&m===em)?rem:loan.amount;
     }
-    if (loan.adjMode==='last') {
-      return (y===loan.endYear && m===loan.endMonth) ? loan.amount+rem : loan.amount;
-    }
-    if (loan.adjMode==='extra') {
-      const ey=effectiveEnd(loan), em=effectiveEndM(loan);
-      return (y===ey && m===em) ? rem : loan.amount;
+    if(loan.adjMode==='extraFirst') {
+      const sy=effectiveStart(loan),sm=effectiveStartM(loan);
+      return (y===sy&&m===sm)?rem:loan.amount;
     }
     return loan.amount;
   }
@@ -368,7 +392,8 @@
   }
   function totalYen(loan) {
     const rem=loan.remainder||0;
-    if(loan.adjMode==='extra') return loan.amount*(totalMonths(loan)-1)+rem;
+    if(loan.adjMode==='extra'||loan.adjMode==='extraFirst')
+      return loan.amount*(totalMonths(loan)-1)+rem;
     return loan.amount*totalMonths(loan)+rem;
   }
   function prepayTotal(loan) {
@@ -383,7 +408,7 @@
     return (ey-TY)*12+(em-TM)+1;
   }
   function isEnded(loan) {
-    return effectiveEnd(loan)*100+effectiveEndM(loan) < TY*100+TM;
+    return effectiveEnd(loan)*100+effectiveEndM(loan)<TY*100+TM;
   }
 
   /* ── Animate ── */
@@ -453,9 +478,16 @@
     /* period row */
     const pr=document.createElement('div'); pr.className='period-row';
     const pt=document.createElement('span'); pt.className='period-txt';
+    const sy=effectiveStart(loan),sm=effectiveStartM(loan);
     const ey=effectiveEnd(loan),em=effectiveEndM(loan);
-    pt.textContent=`${loan.startYear}年${loan.startMonth}月 〜 ${ey}年${em}月`;
-    if(loan.adjMode==='extra'&&loan.remainder>0){const note=document.createElement('span');note.style.cssText='font-size:10px;color:#e8a87c;';note.textContent=`（最終月 ¥${loan.remainder.toLocaleString()}）`;pr.append(pt,note);}else{pr.appendChild(pt);}
+    pt.textContent=`${sy}年${sm}月 〜 ${ey}年${em}月`;
+    if((loan.adjMode==='extra'||loan.adjMode==='extraFirst')&&loan.remainder>0){
+      const note=document.createElement('span');
+      note.style.cssText='font-size:10px;color:#e8a87c;';
+      const isFirst=loan.adjMode==='extraFirst';
+      note.textContent=isFirst?`（最初の月 ¥${loan.remainder.toLocaleString()}）`:`（最終月 ¥${loan.remainder.toLocaleString()}）`;
+      pr.append(pt,note);
+    } else { pr.appendChild(pt); }
     const badge=document.createElement('span'); badge.className='period-badge';
     if(ended){badge.style.cssText='background:#f0ece6;color:#b5a898;';badge.textContent='返済完了';}
     else{badge.style.cssText=`background:${loan.color}18;color:${loan.color};`;badge.textContent=`残 ${remM}ヶ月`;}
@@ -530,7 +562,8 @@
   let adjMode='last';
   function setAdj(a){
     adjMode=a;
-    ['adjFirst','adjLast','adjExtra'].forEach(id=>document.getElementById(id).classList.toggle('active',id==='adj'+a.charAt(0).toUpperCase()+a.slice(1)));
+    const map={first:'adjFirst',last:'adjLast',extraFirst:'adjExtraFirst',extra:'adjExtra'};
+    Object.entries(map).forEach(([k,id])=>document.getElementById(id).classList.toggle('active',k===a));
     updatePreview();
   }
   function getFormMonths(){
@@ -550,7 +583,7 @@
     if(!total||total===calcTotal){el.innerHTML=`月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = 総額 <b>¥${calcTotal.toLocaleString()}</b>`;return;}
     const rem=total-calcTotal;
     if(rem<=0){el.innerHTML=`月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = <b>¥${calcTotal.toLocaleString()}</b>`;return;}
-    const labels={'first':'最初の月に加算','last':'最後の月に加算','extra':`1ヶ月追加（¥${rem.toLocaleString()}のみ）`};
+    const labels={'first':'最初の月に加算','last':'最後の月に加算','extraFirst':`1ヶ月追加・最初（¥${rem.toLocaleString()}のみ）`,'extra':`1ヶ月追加・最後（¥${rem.toLocaleString()}のみ）`};
     el.innerHTML=`月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = <b>¥${calcTotal.toLocaleString()}</b><br>端数 <b style="color:#e8a87c">¥${rem.toLocaleString()}</b> → ${labels[adjMode]}<br>実際の総額: <b>¥${total.toLocaleString()}</b>`;
   }
   ['fAmount','fTotal','fSY','fSM','fEY','fEM'].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener('input',updatePreview);el.addEventListener('change',updatePreview);}});
@@ -569,7 +602,7 @@
     document.getElementById('formTitle').textContent='返済を編集';
     document.getElementById('fConfirm').textContent='保存する';
     document.getElementById('fName').value=loan.name; document.getElementById('fAmount').value=loan.amount;
-    document.getElementById('fTotal').value=loan.remainder?(loan.adjMode==='extra'?loan.amount*(totalMonths(loan)-1)+loan.remainder:loan.amount*totalMonths(loan)+loan.remainder):'';
+    document.getElementById('fTotal').value=loan.remainder?((loan.adjMode==='extra'||loan.adjMode==='extraFirst')?loan.amount*(totalMonths(loan)-1)+loan.remainder:loan.amount*totalMonths(loan)+loan.remainder):'';
     fillYears('fSY',loan.startYear);fillMonths('fSM',loan.startMonth);
     fillYears('fEY',loan.endYear);fillMonths('fEM',loan.endMonth);
     setAdj(loan.adjMode||'last'); updatePreview(); showForm();
