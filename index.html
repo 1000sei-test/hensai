@@ -82,7 +82,8 @@
     .month-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; }
     .month-cell { display:flex; flex-direction:column; align-items:center; gap:4px; }
     .month-lbl  { font-size:10px; color:#c8c0b5; }
-    .month-lbl.out { color:#dedad5 !important; }
+    .month-lbl.out { color:#e8e4de !important; }
+    .month-lbl.current { font-weight:700; font-size:11px; }
     .check-btn {
       width:38px; height:38px; border-radius:10px; border:1.5px solid;
       cursor:pointer; display:flex; align-items:center; justify-content:center;
@@ -90,7 +91,17 @@
       transition:all .18s cubic-bezier(.34,1.56,.64,1);
     }
     .check-btn:hover:not(:disabled) { transform:scale(1.12); }
-    .check-btn:disabled { cursor:default; border-color:#f0ece6 !important; background:#faf9f7 !important; color:#ece8e3 !important; }
+    /* out-of-range: very subtle, clearly "not applicable" */
+    .check-btn:disabled {
+      cursor:default;
+      border-color:#ede9e3 !important;
+      background:#faf9f7 !important;
+      color:#e8e4de !important;
+    }
+    /* current month: prominent ring */
+    .check-btn.current-month {
+      box-shadow: 0 0 0 2.5px currentColor;
+    }
     .check-btn.pop { animation:pop .36s cubic-bezier(.34,1.56,.64,1); }
     @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
     .progress-bg   { background:#f0ece6; border-radius:4px; height:3px; width:100%; margin-top:12px; }
@@ -518,7 +529,9 @@
       const ok=inRange(loan,viewYear,month);
       const isNow=viewYear===TY&&month===TM;
       const cell=document.createElement('div'); cell.className='month-cell';
-      const lbl=document.createElement('div'); lbl.className='month-lbl'+(ok?'':' out'); lbl.textContent=MO[i];
+      const lbl=document.createElement('div');
+      lbl.className='month-lbl'+(ok?'':' out')+(ok&&isNow?' current':'');
+      lbl.textContent=MO[i];
       if(ok&&isNow) lbl.style.color=loan.color;
       const btn=document.createElement('button'); btn.className='check-btn'; btn.id=`btn-${loan.id}-${month}`;
       if(!ok){btn.disabled=true;}
@@ -537,10 +550,44 @@
 
   function styleBtn(btn,loan,month,isNow) {
     const paid=!!payments[pkey(loan.id,viewYear,month)];
-    btn.textContent=paid?'✓':'';
-    btn.style.borderColor=paid?loan.color:(isNow?loan.color+'55':'#e8e4de');
-    btn.style.background =paid?loan.color+'18':(isNow?loan.color+'08':'#faf9f7');
-    btn.style.color      =paid?loan.color:'#e0dbd3';
+    // paid: colored fill
+    // unpaid + current: white with strong colored border + glow ring
+    // unpaid + past: light warm gray with dashed border
+    // unpaid + future: white with light border
+    const isPast = viewYear*100+month < TY*100+TM;
+    btn.classList.toggle('current-month', isNow);
+    if(paid) {
+      btn.textContent='✓';
+      btn.style.borderColor=loan.color;
+      btn.style.background=loan.color+'22';
+      btn.style.color=loan.color;
+      btn.style.borderStyle='solid';
+      btn.style.opacity='1';
+    } else if(isNow) {
+      btn.textContent='';
+      btn.style.borderColor=loan.color;
+      btn.style.background='#fff';
+      btn.style.color=loan.color;
+      btn.style.borderStyle='solid';
+      btn.style.borderWidth='2px';
+      btn.style.opacity='1';
+    } else if(isPast) {
+      btn.textContent='';
+      btn.style.borderColor='#d8d2ca';
+      btn.style.background='#f5f2ee';
+      btn.style.color='#d8d2ca';
+      btn.style.borderStyle='dashed';
+      btn.style.borderWidth='1.5px';
+      btn.style.opacity='0.7';
+    } else {
+      btn.textContent='';
+      btn.style.borderColor='#e8e4de';
+      btn.style.background='#faf9f7';
+      btn.style.color='#e0dbd3';
+      btn.style.borderStyle='solid';
+      btn.style.borderWidth='1.5px';
+      btn.style.opacity='1';
+    }
   }
 
   function toggle(loan,month,isNow) {
@@ -570,6 +617,7 @@
     const sy=+document.getElementById('fSY').value,sm=+document.getElementById('fSM').value;
     const ey=+document.getElementById('fEY').value,em=+document.getElementById('fEM').value;
     if(!sy||!sm||!ey||!em) return 0;
+    // always returns the user-set period only (extra month is NOT included)
     return (ey-sy)*12+(em-sm)+1;
   }
   function updatePreview(){
@@ -583,7 +631,12 @@
     if(!total||total===calcTotal){el.innerHTML=`月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = 総額 <b>¥${calcTotal.toLocaleString()}</b>`;return;}
     const rem=total-calcTotal;
     if(rem<=0){el.innerHTML=`月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = <b>¥${calcTotal.toLocaleString()}</b>`;return;}
-    const labels={'first':'最初の月に加算','last':'最後の月に加算','extraFirst':`1ヶ月追加・最初（¥${rem.toLocaleString()}のみ）`,'extra':`1ヶ月追加・最後（¥${rem.toLocaleString()}のみ）`};
+    const labels={
+      'first':`最初の月に加算（1ヶ月目 ¥${(amount+rem).toLocaleString()}）`,
+      'last':`最後の月に加算（最終月 ¥${(amount+rem).toLocaleString()}）`,
+      'extraFirst':`1ヶ月追加・最初（端数月 ¥${rem.toLocaleString()} → 計${months+1}ヶ月）`,
+      'extra':`1ヶ月追加・最後（端数月 ¥${rem.toLocaleString()} → 計${months+1}ヶ月）`,
+    };
     el.innerHTML=`月額 <b>¥${amount.toLocaleString()}</b> × ${months}ヶ月 = <b>¥${calcTotal.toLocaleString()}</b><br>端数 <b style="color:#e8a87c">¥${rem.toLocaleString()}</b> → ${labels[adjMode]}<br>実際の総額: <b>¥${total.toLocaleString()}</b>`;
   }
   ['fAmount','fTotal','fSY','fSM','fEY','fEM'].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener('input',updatePreview);el.addEventListener('change',updatePreview);}});
@@ -602,7 +655,9 @@
     document.getElementById('formTitle').textContent='返済を編集';
     document.getElementById('fConfirm').textContent='保存する';
     document.getElementById('fName').value=loan.name; document.getElementById('fAmount').value=loan.amount;
-    document.getElementById('fTotal').value=loan.remainder?((loan.adjMode==='extra'||loan.adjMode==='extraFirst')?loan.amount*(totalMonths(loan)-1)+loan.remainder:loan.amount*totalMonths(loan)+loan.remainder):'';
+    // base months = user-set period only (no extra month)
+    const baseMonths=(loan.endYear-loan.startYear)*12+(loan.endMonth-loan.startMonth)+1;
+    document.getElementById('fTotal').value=loan.remainder?(loan.amount*baseMonths+loan.remainder):'';
     fillYears('fSY',loan.startYear);fillMonths('fSM',loan.startMonth);
     fillYears('fEY',loan.endYear);fillMonths('fEM',loan.endMonth);
     setAdj(loan.adjMode||'last'); updatePreview(); showForm();
