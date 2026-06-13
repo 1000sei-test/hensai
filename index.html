@@ -270,7 +270,16 @@
   <p class="footer-note">データはこのブラウザに保存されます</p>
 </main>
 
-<!-- Prepayment modal -->
+<!-- Missed payments modal -->
+<div class="overlay hidden" id="missedOverlay">
+  <div class="modal">
+    <div class="modal-title" id="missedTitle"></div>
+    <div id="missedList" style="display:flex;flex-direction:column;gap:8px;max-height:50vh;overflow-y:auto;"></div>
+    <div style="margin-top:16px;">
+      <button class="btn btn-secondary" style="width:100%;" id="missedClose">閉じる</button>
+    </div>
+  </div>
+</div>
 <div class="overlay hidden" id="prepayOverlay">
   <div class="modal">
     <div class="modal-title" id="prepayTitle">繰り上げ返済を記録</div>
@@ -482,9 +491,22 @@
     nr.append(dot,info); left.appendChild(nr);
     const right=document.createElement('div'); right.className='loan-meta';
     const cnt=document.createElement('span'); cnt.className='loan-cnt'; cnt.id=`cnt-${loan.id}`; cnt.textContent=`${totP}/${totM}ヶ月`;
+
+    // missed payments badge
+    let missed=0;
+    for(let y=loan.startYear;y<=effectiveEnd(loan);y++)
+      for(let m=1;m<=12;m++)
+        if(inRange(loan,y,m)&&(y*100+m<TY*100+TM)&&!payments[pkey(loan.id,y,m)]) missed++;
+    const missedBadge=document.createElement('span');
+    missedBadge.id=`miss-${loan.id}`;
+    if(missed>0){
+      missedBadge.textContent=`未払 ${missed}`;
+      missedBadge.style.cssText='font-size:10px;font-weight:700;background:#fdf0f0;color:#d97070;border:1px solid #e8a0a0;border-radius:20px;padding:2px 7px;cursor:pointer;';
+      missedBadge.onclick=(e)=>{e.stopPropagation();openMissed(loan.id);};
+    }
     const editBtn=document.createElement('button'); editBtn.className='icon-btn'; editBtn.textContent='✎'; editBtn.title='編集'; editBtn.onclick=()=>openEdit(loan);
     const delBtn=document.createElement('button');  delBtn.className='icon-btn del'; delBtn.textContent='×'; delBtn.onclick=()=>{loans=loans.filter(l=>l.id!==loan.id);save();render();};
-    right.append(cnt,editBtn,delBtn); hdr.append(left,right); card.appendChild(hdr);
+    right.append(cnt,missedBadge,editBtn,delBtn); hdr.append(left,right); card.appendChild(hdr);
 
     /* period row */
     const pr=document.createElement('div'); pr.className='period-row';
@@ -529,10 +551,13 @@
       const ok=inRange(loan,viewYear,month);
       const isNow=viewYear===TY&&month===TM;
       const cell=document.createElement('div'); cell.className='month-cell';
+      const isPast = viewYear*100+month < TY*100+TM;
+      const paid = ok && !!payments[pkey(loan.id,viewYear,month)];
       const lbl=document.createElement('div');
       lbl.className='month-lbl'+(ok?'':' out')+(ok&&isNow?' current':'');
       lbl.textContent=MO[i];
       if(ok&&isNow) lbl.style.color=loan.color;
+      else if(ok&&isPast&&!paid) lbl.style.color='#d97070';
       const btn=document.createElement('button'); btn.className='check-btn'; btn.id=`btn-${loan.id}-${month}`;
       if(!ok){btn.disabled=true;}
       else{styleBtn(btn,loan,month,isNow);btn.title=`¥${amountForMonth(loan,viewYear,month).toLocaleString()}`;btn.onclick=()=>toggle(loan,month,isNow);}
@@ -572,13 +597,15 @@
       btn.style.borderWidth='2px';
       btn.style.opacity='1';
     } else if(isPast) {
-      btn.textContent='';
-      btn.style.borderColor='#d8d2ca';
-      btn.style.background='#f5f2ee';
-      btn.style.color='#d8d2ca';
-      btn.style.borderStyle='dashed';
+      btn.textContent='!';
+      btn.style.borderColor='#e8a0a0';
+      btn.style.background='#fdf0f0';
+      btn.style.color='#d97070';
+      btn.style.borderStyle='solid';
       btn.style.borderWidth='1.5px';
-      btn.style.opacity='0.7';
+      btn.style.opacity='1';
+      btn.style.fontWeight='700';
+      btn.style.fontSize='15px';
     } else {
       btn.textContent='';
       btn.style.borderColor='#e8e4de';
@@ -597,6 +624,13 @@
     if(btn){btn.classList.remove('pop');void btn.offsetWidth;btn.classList.add('pop');styleBtn(btn,loan,month,isNow);btn.addEventListener('animationend',()=>btn.classList.remove('pop'),{once:true});}
     const totP=paidCountAllTime(loan),totM=totalMonths(loan);
     const c=document.getElementById(`cnt-${loan.id}`); if(c) c.textContent=`${totP}/${totM}ヶ月`;
+    // update missed badge
+    let missed=0;
+    for(let y=loan.startYear;y<=effectiveEnd(loan);y++)
+      for(let m=1;m<=12;m++)
+        if(inRange(loan,y,m)&&(y*100+m<TY*100+TM)&&!payments[pkey(loan.id,y,m)]) missed++;
+    const mb=document.getElementById(`miss-${loan.id}`);
+    if(mb){ if(missed>0){mb.textContent=`未払 ${missed}`;mb.style.cssText='font-size:10px;font-weight:700;background:#fdf0f0;color:#d97070;border:1px solid #e8a0a0;border-radius:20px;padding:2px 7px;cursor:pointer;';mb.onclick=(e)=>{e.stopPropagation();openMissed(loan.id);};}else{mb.textContent='';mb.style.cssText='';mb.onclick=null;} }
     const lcv=document.getElementById(`lcv-${loan.id}`); if(lcv) animVal(`lcv-${loan.id}`,paidYenAllTime(loan)+prepayTotal(loan));
     const viewPaid=MO.filter((_,i)=>inRange(loan,viewYear,i+1)&&payments[pkey(loan.id,viewYear,i+1)]).length;
     const viewTotal=MO.filter((_,i)=>inRange(loan,viewYear,i+1)).length;
@@ -683,6 +717,73 @@
     else loans=loans.map(l=>l.id===editingId?{...l,...loanData}:l);
     save();render();closeForm();
   };
+
+  /* ── Missed payments modal ── */
+  function updateCardAfterToggle(loan,y,m) {
+    const btn=document.getElementById(`btn-${loan.id}-${m}`);
+    if(btn&&viewYear===y){styleBtn(btn,loan,m,y===TY&&m===TM);}
+    const totP=paidCountAllTime(loan),totM=totalMonths(loan);
+    const c=document.getElementById(`cnt-${loan.id}`);if(c)c.textContent=`${totP}/${totM}ヶ月`;
+    const lcv=document.getElementById(`lcv-${loan.id}`);if(lcv)animVal(`lcv-${loan.id}`,paidYenAllTime(loan)+prepayTotal(loan));
+    let newMissed=0;
+    for(let yy=loan.startYear;yy<=effectiveEnd(loan);yy++)
+      for(let mm=1;mm<=12;mm++)
+        if(inRange(loan,yy,mm)&&(yy*100+mm<TY*100+TM)&&!payments[pkey(loan.id,yy,mm)]) newMissed++;
+    const mb=document.getElementById(`miss-${loan.id}`);
+    if(mb){if(newMissed>0){mb.textContent=`未払 ${newMissed}`;mb.style.cssText='font-size:10px;font-weight:700;background:#fdf0f0;color:#d97070;border:1px solid #e8a0a0;border-radius:20px;padding:2px 7px;cursor:pointer;';mb.onclick=(e)=>{e.stopPropagation();openMissed(loan.id);};}else{mb.textContent='';mb.style.cssText='';mb.onclick=null;}}
+    const vp=MO.filter((_,i)=>inRange(loan,viewYear,i+1)&&payments[pkey(loan.id,viewYear,i+1)]).length;
+    const vt=MO.filter((_,i)=>inRange(loan,viewYear,i+1)).length;
+    const f=document.getElementById(`prg-${loan.id}`);if(f)f.style.width=(vt===0?0:Math.round(vp/vt*100))+'%';
+    renderSummary();
+  }
+  function openMissed(loanId) {
+    const loan=loans.find(l=>l.id===loanId);
+    document.getElementById('missedTitle').textContent=`${loan.name} — 未払い一覧`;
+    const list=document.getElementById('missedList');
+    list.innerHTML='';
+    const missedMonths=[];
+    for(let y=loan.startYear;y<=effectiveEnd(loan);y++)
+      for(let m=1;m<=12;m++)
+        if(inRange(loan,y,m)&&(y*100+m<TY*100+TM)&&!payments[pkey(loan.id,y,m)])
+          missedMonths.push({y,m});
+    if(missedMonths.length===0){
+      list.innerHTML='<div style="text-align:center;color:#b5a898;font-size:13px;padding:16px 0;">未払いはありません 🎉</div>';
+    } else {
+      missedMonths.forEach(({y,m})=>{
+        const row=document.createElement('div');
+        row.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fdf0f0;border:1px solid #e8a0a0;border-radius:10px;';
+        const amt=amountForMonth(loan,y,m);
+        row.innerHTML=`<div><span style="font-weight:700;color:#2a2825;">${y}年${m}月</span><span style="font-size:12px;color:#9a9288;margin-left:8px;">¥${amt.toLocaleString()}</span></div>`;
+        const chk=document.createElement('button');
+        chk.style.cssText='border:none;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;background:#6b8f71;color:#fff;font-family:inherit;';
+        chk.textContent='払った';
+        chk.onclick=()=>{
+          payments[pkey(loan.id,y,m)]=true; save();
+          row.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#f0f7f1;border:1px solid #a8d0b0;border-radius:10px;';
+          chk.textContent='✓ 払済'; chk.disabled=true; chk.style.cssText='border:none;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;background:#a8d0b0;color:#fff;font-family:inherit;cursor:default;';
+
+          // undo button
+          const undo=document.createElement('button');
+          undo.style.cssText='border:none;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;background:#f0ece6;color:#9a9288;font-family:inherit;margin-left:6px;';
+          undo.textContent='取り消し';
+          undo.onclick=()=>{
+            payments[pkey(loan.id,y,m)]=false; save();
+            row.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fdf0f0;border:1px solid #e8a0a0;border-radius:10px;';
+            chk.textContent='払った'; chk.disabled=false; chk.style.cssText='border:none;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;background:#6b8f71;color:#fff;font-family:inherit;';
+            row.removeChild(undo);
+            updateCardAfterToggle(loan,y,m);
+          };
+          row.appendChild(undo);
+          updateCardAfterToggle(loan,y,m);
+        };
+        row.appendChild(chk);
+        list.appendChild(row);
+      });
+    }
+    document.getElementById('missedOverlay').classList.remove('hidden');
+  }
+  document.getElementById('missedClose').onclick=()=>document.getElementById('missedOverlay').classList.add('hidden');
+  document.getElementById('missedOverlay').onclick=(e)=>{if(e.target===e.currentTarget)document.getElementById('missedOverlay').classList.add('hidden');};
 
   /* ── Prepayment modal ── */
   let prepayLoanId=null;
